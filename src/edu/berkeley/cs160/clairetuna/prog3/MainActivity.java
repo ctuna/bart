@@ -35,17 +35,19 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main); 
 		Log.i("MyApplication", "Starting application");
 	    mImageMap = (ImageMap)findViewById(R.id.map);
 
-    	getTripInfo("24TH", "ROCK");
+	    System.out.println("IN ONCREATE");
+	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("11:32 AM", "1:02 PM"));
+	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("11:15 AM", "1:00 PM"));
+    	//getTripInfo("16TH", "24TH");
 	
         // add a click handler to react when areas are tapped
         mImageMap.addOnImageMapClickedHandler(new ImageMap.OnImageMapClickedHandler() {
             @Override
-            public void onImageMapClicked(int id) {
-            	
+            public void onImageMapClicked(int id) {            	
                 // when the area is tapped, show the name in a
                 // text bubble
                 mImageMap.showBubble(id);
@@ -83,11 +85,11 @@ public class MainActivity extends Activity {
 	public void updateTripInfo(){
 		Log.i("MyApplication", "getTrip Info after execute");
 		rightNow= Calendar.getInstance();
-		int hour = rightNow.HOUR;
-		int minute = rightNow.MINUTE;
+		int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+		int minute = rightNow.get(Calendar.MINUTE);
 		Log.i("MyApplication", "getTrip Info after get calendar");
 		String departureTime = task.getStartTime();
-		Log.i("MyApplication", "getTrip Info after get start time");
+		String fare = task.getFare();
 		System.out.println("DEPARTURE TIME IS " + departureTime);
 		int departureMinute = Integer.parseInt(departureTime.split(":")[1].substring(0, 2));
 		System.out.println("DEPARTURE MINUTE IS " + departureMinute);

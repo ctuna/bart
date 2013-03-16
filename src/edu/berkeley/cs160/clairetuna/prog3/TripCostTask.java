@@ -37,6 +37,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     	String stationOrig = stations[0];
     	String stationDest = stations[1];
     	url+="&cmd=depart&orig="+ stationOrig + "&dest=" + stationDest;
+    	Log.i("MyApplication", "Going to the url: "+ url);
     		   HttpClient httpclient = new DefaultHttpClient();
     	       HttpResponse response;
     	       String responseString = null;
@@ -78,18 +79,24 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 		   	InputSource is = new InputSource(new StringReader(results));
 	 	        xmlDocument = builder.parse(is); 
 	 	        fare = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("fare").getNodeValue();
+	 	        int scheduleNumber = Integer.parseInt(xmlDocument.getElementsByTagName("time").item(0).getNodeValue());
 	 	        startTime = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("origTimeMin").getNodeValue();
 	 	        arrivalTime = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("origTimeMin").getNodeValue();
-	
+	 	       Log.i("MyApplication", "SCHEDULE NUMBER IS: " + scheduleNumber);
+	 	        Log.i("MyApplication", "in try in onPostExecute");
         	}
         	catch (Exception ex) {
         		Log.i("MyApplication", "Exception in on onPostExecute");
         		//do something
         	}
         }
+        else {
+        	Log.i("MyApplication", "results to XML query were null");
+        }
        
     	Log.i("MyApplication", "Task Done Executing");
-    	 master.updateTripInfo();
+    	Log.i("MyApplication", "IN TRIPCOST FARE IS : " + fare);
+    	master.updateTripInfo();
     }
 
 	public String getFare(){
@@ -105,6 +112,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	}
 	
 	public void setMaster(MainActivity master){
+		Log.i("MyApplication", "Set master is called");
 		this.master=master;
 	}
 
