@@ -40,7 +40,8 @@ public class MainActivity extends Activity {
 	    mImageMap = (ImageMap)findViewById(R.id.map);
 
 	    System.out.println("IN ONCREATE");
-	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("11:32 AM", "1:02 PM"));
+	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("11:32 AM", "11:34 AM"));
+	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("9:09 AM", "10:08 AM"));
 	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("11:15 AM", "1:00 PM"));
     	//getTripInfo("16TH", "24TH");
 	

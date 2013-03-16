@@ -33,7 +33,12 @@ public abstract class TimeHelper {
 				toReturn += hoursDifferent + " hours ";
 			}
 		}
+		if (minutesDifferent == 1){
+			toReturn+= minutesDifferent + " mins";
+		}
+		else{
 		toReturn+= minutesDifferent + " mins";
+		}
 		return toReturn;
 	}
 	
