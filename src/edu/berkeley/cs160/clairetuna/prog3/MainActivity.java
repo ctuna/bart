@@ -3,10 +3,11 @@ package edu.berkeley.cs160.clairetuna.prog3;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -21,21 +22,27 @@ import org.xml.sax.InputSource;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
 	ImageMap mImageMap;
 	private Document xmlDocument;
+	Calendar rightNow = Calendar.getInstance();
+	
+	public TripCostTask task;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_main);
+		Log.i("MyApplication", "Starting application");
 	    mImageMap = (ImageMap)findViewById(R.id.map);
-	    System.out.print("clicked something");
+
+    	getTripInfo("24TH", "ROCK");
+	
         // add a click handler to react when areas are tapped
         mImageMap.addOnImageMapClickedHandler(new ImageMap.OnImageMapClickedHandler() {
-        	
             @Override
             public void onImageMapClicked(int id) {
             	
@@ -65,26 +72,31 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	protected void onPostExecute(String results)
-    {       
-        if(results != null)
-        {   
-        	try {
-	        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	 		   	DocumentBuilder builder = factory.newDocumentBuilder();
-	 		   	InputSource is = new InputSource(new StringReader(results));
-	 	        xmlDocument = builder.parse(is); 
-	 	        
-	 	       int traincount = Integer.parseInt(xmlDocument.getElementsByTagName("traincount").item(0).getTextContent());
-	 	       System.out.println("TRAINCOUNT IS: " + traincount);
-        	}
-        	catch (Exception ex) {
-        		//do something
-        	}
-        }
-    }
     
-
+	public void getTripInfo(String stationOrig, String stationDest){		
+		task = new TripCostTask();
+		task.setMaster(this);
+		task.execute(stationOrig, stationDest);
+		
+	}
+	
+	public void updateTripInfo(){
+		Log.i("MyApplication", "getTrip Info after execute");
+		rightNow= Calendar.getInstance();
+		int hour = rightNow.HOUR;
+		int minute = rightNow.MINUTE;
+		Log.i("MyApplication", "getTrip Info after get calendar");
+		String departureTime = task.getStartTime();
+		Log.i("MyApplication", "getTrip Info after get start time");
+		System.out.println("DEPARTURE TIME IS " + departureTime);
+		int departureMinute = Integer.parseInt(departureTime.split(":")[1].substring(0, 2));
+		System.out.println("DEPARTURE MINUTE IS " + departureMinute);
+		System.out.println("THIS MINUTE IS " + minute);
+		Log.i("MyApplication", "after string business");
+		int difference = departureMinute-minute;
+		System.out.println("LEAVING IN : "+ difference + "MINUTES" );
+		System.out.println(rightNow.get(Calendar.HOUR_OF_DAY) + ":" + rightNow.get(Calendar.MINUTE));
+	}
 	
 	private class BartCheckTask extends AsyncTask<String, Void, String> {
 
@@ -94,7 +106,7 @@ public class MainActivity extends Activity {
 
         public String doInBackground(String... city)
         {
-        		   
+        	Log.i("MyApplication", "In do in background");
         		   HttpClient httpclient = new DefaultHttpClient();
         	       HttpResponse response;
         	       String responseString = null;
@@ -104,11 +116,15 @@ public class MainActivity extends Activity {
         	            response = httpclient.execute(new HttpGet(url));
         	            StatusLine statusLine = response.getStatusLine();
         	            if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+        	            	Log.i("MyApplication", "In do in background: Status code OK");
         	                ByteArrayOutputStream out = new ByteArrayOutputStream();
         	                response.getEntity().writeTo(out);
+        	                Log.i("MyApplication", "In do in background: checkpoint 2");
         	                out.close();
         	                responseString = out.toString();
+        	                Log.i("MyApplication", "In do in background: checkpoint 3");
         	            } else{
+        	            	Log.i("MyApplication", "In do in background: Status code not okay");
         	                //Closes the connection.
         	                response.getEntity().getContent().close();
         	                throw new IOException(statusLine.getReasonPhrase());
@@ -118,8 +134,31 @@ public class MainActivity extends Activity {
         	        } catch (IOException e) {
         	            //TODO Handle problems..
         	        }
+        	       Log.i("MyApplication", "In do in background: checkpoint 4");
         	        return responseString;
            }
+    	protected void onPostExecute(String results)
+        {       
+    		Log.i("MyApplication", "In onPostExecute");
+            if(results != null)
+            {   
+            	try {
+    	        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    	 		   	DocumentBuilder builder = factory.newDocumentBuilder();
+    	 		   	InputSource is = new InputSource(new StringReader(results));
+    	 	        xmlDocument = builder.parse(is); 
+    	 	        
+    	 	       int traincount = Integer.parseInt(xmlDocument.getElementsByTagName("traincount").item(0).getTextContent());
+    	 	       System.out.println("TRAINCOUNT IS: " + traincount);
+            	}
+            	catch (Exception ex) {
+            		Log.i("MyApplication", "Exception in on onPostExecute");
+            		//do something
+            	}
+            }
+        	Log.i("MyApplication", "Task Done Executing");
+        }
+
         }
         
         

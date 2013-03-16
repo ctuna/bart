@@ -9,7 +9,7 @@
         <area name="green" shape="poly" coords="592,502,592,730,808,730,808,502,709,502,709,603,690,603,690,502" id="@+id/area1007"/>
     </map>
        <map name="bartmap">
-        <area name="elcerrito1" shape="rect" coords="0, 0, 500, 500" id="@+id/Elcerritodelpoopy"/>
+        <area name="elcerrito1" shape="rect" coords="277, 107, 384, 93" id="@+id/Elcerritodelpoopy"/>
         
     </map>
     <map name="usamap">
