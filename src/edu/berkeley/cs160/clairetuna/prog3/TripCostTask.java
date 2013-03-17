@@ -26,6 +26,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	private String fare;
 	private String startTime;
 	private String arrivalTime;
+	private String timeNow;
 	private MainActivity master;
 	private final String API_KEY = "TJK4-R9EV-6R8E-UW7T";
 	private  String url = "http://api.bart.gov/api/sched.aspx?key="+ API_KEY;
@@ -36,7 +37,8 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     {
     	String stationOrig = stations[0];
     	String stationDest = stations[1];
-    	url+="&cmd=depart&orig="+ stationOrig + "&dest=" + stationDest;
+    	//url+="&cmd=depart&orig="+ stationOrig + "&dest=" + stationDest;
+    	url = "http://api.bart.gov/api/sched.aspx?key=MW9S-E7SL-26DU-VV8V&cmd=depart&orig="+stationOrig+"&dest="+stationDest;
     	Log.i("MyApplication", "Going to the url: "+ url);
     		   HttpClient httpclient = new DefaultHttpClient();
     	       HttpResponse response;
@@ -55,17 +57,20 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     	                responseString = out.toString();
     	                //Log.i("MyApplication", "In do in background: checkpoint 3");
     	            } else{
-    	            	//Log.i("MyApplication", "In do in background: Status code not okay");
+    	            	Log.i("MyApplication", "In do in background: Status code not okay");
     	                //Closes the connection.
     	                response.getEntity().getContent().close();
     	                throw new IOException(statusLine.getReasonPhrase());
     	            }
     	        } catch (ClientProtocolException e) {
+    	        	Log.i("MyApplication", "Client protocol exception");
     	            //TODO Handle problems..
     	        } catch (IOException e) {
+    	        	Log.i("MyApplication", "Io");
     	            //TODO Handle problems..
     	        }
-    	       Log.i("MyApplication", "In do in background: done");
+    	       Log.i("MyApplication", "In do in background: done, return string is: "+ responseString);
+    	       
     	       return responseString;
        }
 	protected void onPostExecute(String results)
@@ -79,11 +84,11 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 		   	InputSource is = new InputSource(new StringReader(results));
 	 	        xmlDocument = builder.parse(is); 
 	 	        fare = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("fare").getNodeValue();
-	 	        int scheduleNumber = Integer.parseInt(xmlDocument.getElementsByTagName("time").item(0).getNodeValue());
+	 	        timeNow = xmlDocument.getElementsByTagName("time").item(0).getTextContent();
 	 	        startTime = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("origTimeMin").getNodeValue();
-	 	        arrivalTime = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("origTimeMin").getNodeValue();
-	 	       Log.i("MyApplication", "SCHEDULE NUMBER IS: " + scheduleNumber);
-	 	        Log.i("MyApplication", "in try in onPostExecute");
+	 	        arrivalTime = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("destTimeMin").getNodeValue();
+
+	 	       master.updateTripInfo();
         	}
         	catch (Exception ex) {
         		Log.i("MyApplication", "Exception in on onPostExecute");
@@ -96,7 +101,9 @@ class TripCostTask extends AsyncTask<String, Void, String> {
        
     	Log.i("MyApplication", "Task Done Executing");
     	Log.i("MyApplication", "IN TRIPCOST FARE IS : " + fare);
-    	master.updateTripInfo();
+    	Log.i("MyApplication", "IN TRIPCOST TIME NOW IS : " + timeNow);
+    	Log.i("MyApplication", "IN TRIPCOST START TIME IS  : " + startTime);
+    	Log.i("MyApplication", "IN TRIPCOST ARRIVAL TIME IS  : " + arrivalTime);
     }
 
 	public String getFare(){
@@ -109,6 +116,10 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	
 	public String getArrivalTime(){
 		return arrivalTime;
+	}
+	
+	public String getTimeNow(){
+		return timeNow;
 	}
 	
 	public void setMaster(MainActivity master){

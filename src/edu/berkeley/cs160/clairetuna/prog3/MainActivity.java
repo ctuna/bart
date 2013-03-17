@@ -39,11 +39,7 @@ public class MainActivity extends Activity {
 		Log.i("MyApplication", "Starting application");
 	    mImageMap = (ImageMap)findViewById(R.id.map);
 
-	    System.out.println("IN ONCREATE");
-	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("11:32 AM", "11:34 AM"));
-	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("9:09 AM", "10:08 AM"));
-	    System.out.println("DIFFERENCE IS:"+ TimeHelper.difference("11:15 AM", "1:00 PM"));
-    	//getTripInfo("16TH", "24TH");
+    	getTripInfo("16TH", "24TH");
 	
         // add a click handler to react when areas are tapped
         mImageMap.addOnImageMapClickedHandler(new ImageMap.OnImageMapClickedHandler() {
@@ -84,21 +80,15 @@ public class MainActivity extends Activity {
 	}
 	
 	public void updateTripInfo(){
-		Log.i("MyApplication", "getTrip Info after execute");
-		rightNow= Calendar.getInstance();
-		int hour = rightNow.get(Calendar.HOUR_OF_DAY);
-		int minute = rightNow.get(Calendar.MINUTE);
-		Log.i("MyApplication", "getTrip Info after get calendar");
+		
+		String timeNow = task.getTimeNow();
 		String departureTime = task.getStartTime();
 		String fare = task.getFare();
-		System.out.println("DEPARTURE TIME IS " + departureTime);
-		int departureMinute = Integer.parseInt(departureTime.split(":")[1].substring(0, 2));
-		System.out.println("DEPARTURE MINUTE IS " + departureMinute);
-		System.out.println("THIS MINUTE IS " + minute);
-		Log.i("MyApplication", "after string business");
-		int difference = departureMinute-minute;
-		System.out.println("LEAVING IN : "+ difference + "MINUTES" );
-		System.out.println(rightNow.get(Calendar.HOUR_OF_DAY) + ":" + rightNow.get(Calendar.MINUTE));
+		
+		String difference = TimeHelper.difference(timeNow, departureTime);
+		boolean isAfter = TimeHelper.isAfter(timeNow, departureTime);
+		Log.i("MyApplication", "DIFFERENCE: " + difference);
+		Log.i("MyApplication", "Is leave in the future?: " + isAfter);
 	}
 	
 	private class BartCheckTask extends AsyncTask<String, Void, String> {
