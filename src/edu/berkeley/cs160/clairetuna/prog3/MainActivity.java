@@ -1,26 +1,13 @@
 package edu.berkeley.cs160.clairetuna.prog3;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,18 +16,22 @@ public class MainActivity extends Activity {
 	ImageMap mImageMap;
 	private Document xmlDocument;
 	Calendar rightNow = Calendar.getInstance();
-	
+	LocationManager manager;
 	public TripCostTask task;
-	
+	public StationsTask stationsTask;
+	private HashMap<String, Double[]> stationCoordinates;
+	LocationActivity locationActivity;
+	Location userLocation; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main); 
 		Log.i("MyApplication", "Starting application");
 	    mImageMap = (ImageMap)findViewById(R.id.map);
-
-    	getTripInfo("16TH", "24TH");
 	
+    	//getTripInfo("24TH", "16TH");
+	    getStationInfo();
+	    locationActivity = new LocationActivity(this);
         // add a click handler to react when areas are tapped
         mImageMap.addOnImageMapClickedHandler(new ImageMap.OnImageMapClickedHandler() {
             @Override
@@ -64,6 +55,21 @@ public class MainActivity extends Activity {
 		
 	}
 
+	public void updateLocation(){
+		userLocation = locationActivity.getLocation();
+		Double userLatitude = userLocation.getLatitude();
+		Double userLongitude = userLocation.getLongitude();
+    	//LocationHelper locationHelper = new LocationHelper(this);
+    	
+	}
+	
+	
+	public void setCoordinates(HashMap<String, Double[]> coords){
+		this.stationCoordinates=coords;
+		Log.i("MyApplication", "received coordinates in master");
+	}
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -76,8 +82,15 @@ public class MainActivity extends Activity {
 		task = new TripCostTask();
 		task.setMaster(this);
 		task.execute(stationOrig, stationDest);
-		
 	}
+	
+	public void getStationInfo(){
+		Log.i("MyApplication", "starting Get Station info");
+		stationsTask = new StationsTask();
+		stationsTask.setMaster(this);
+		stationsTask.execute();
+	}
+	
 	
 	public void updateTripInfo(){
 		
@@ -91,71 +104,11 @@ public class MainActivity extends Activity {
 		Log.i("MyApplication", "Is leave in the future?: " + isAfter);
 	}
 	
-	private class BartCheckTask extends AsyncTask<String, Void, String> {
-
-    	private final String API_KEY = "TJK4-R9EV-6R8E-UW7T";
-    	private final String url = "http://api.bart.gov/api/bsa.aspx?cmd=count&key=" + API_KEY;
-    	private Document xmlDocument;
-
-        public String doInBackground(String... city)
-        {
-        	Log.i("MyApplication", "In do in background");
-        		   HttpClient httpclient = new DefaultHttpClient();
-        	       HttpResponse response;
-        	       String responseString = null;
-        	       
-        	       
-        	       try {
-        	            response = httpclient.execute(new HttpGet(url));
-        	            StatusLine statusLine = response.getStatusLine();
-        	            if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-        	            	Log.i("MyApplication", "In do in background: Status code OK");
-        	                ByteArrayOutputStream out = new ByteArrayOutputStream();
-        	                response.getEntity().writeTo(out);
-        	                Log.i("MyApplication", "In do in background: checkpoint 2");
-        	                out.close();
-        	                responseString = out.toString();
-        	                Log.i("MyApplication", "In do in background: checkpoint 3");
-        	            } else{
-        	            	Log.i("MyApplication", "In do in background: Status code not okay");
-        	                //Closes the connection.
-        	                response.getEntity().getContent().close();
-        	                throw new IOException(statusLine.getReasonPhrase());
-        	            }
-        	        } catch (ClientProtocolException e) {
-        	            //TODO Handle problems..
-        	        } catch (IOException e) {
-        	            //TODO Handle problems..
-        	        }
-        	       Log.i("MyApplication", "In do in background: checkpoint 4");
-        	        return responseString;
-           }
-    	protected void onPostExecute(String results)
-        {       
-    		Log.i("MyApplication", "In onPostExecute");
-            if(results != null)
-            {   
-            	try {
-    	        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    	 		   	DocumentBuilder builder = factory.newDocumentBuilder();
-    	 		   	InputSource is = new InputSource(new StringReader(results));
-    	 	        xmlDocument = builder.parse(is); 
-    	 	        
-    	 	       int traincount = Integer.parseInt(xmlDocument.getElementsByTagName("traincount").item(0).getTextContent());
-    	 	       System.out.println("TRAINCOUNT IS: " + traincount);
-            	}
-            	catch (Exception ex) {
-            		Log.i("MyApplication", "Exception in on onPostExecute");
-            		//do something
-            	}
-            }
-        	Log.i("MyApplication", "Task Done Executing");
-        }
-
-        }
-        
-        
 	
+
 }
+
+	
+
 
 	

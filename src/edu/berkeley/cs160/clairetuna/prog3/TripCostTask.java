@@ -83,11 +83,18 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 		   	DocumentBuilder builder = factory.newDocumentBuilder();
 	 		   	InputSource is = new InputSource(new StringReader(results));
 	 	        xmlDocument = builder.parse(is); 
-	 	        fare = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("fare").getNodeValue();
+	 	        boolean foundTrip = false;
+	 	        int i = 0;
 	 	        timeNow = xmlDocument.getElementsByTagName("time").item(0).getTextContent();
-	 	        startTime = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("origTimeMin").getNodeValue();
-	 	        arrivalTime = xmlDocument.getElementsByTagName("trip").item(0).getAttributes().getNamedItem("destTimeMin").getNodeValue();
-
+	 	        while (!foundTrip){
+	 	        fare = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("fare").getNodeValue();
+	 	        startTime = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("origTimeMin").getNodeValue();
+	 	        arrivalTime = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("destTimeMin").getNodeValue();
+	 	        if (TimeHelper.isAfter(timeNow, startTime)){
+	 	        	foundTrip=true;
+	 	        }
+	 	        i++;
+	 	        }
 	 	       master.updateTripInfo();
         	}
         	catch (Exception ex) {
