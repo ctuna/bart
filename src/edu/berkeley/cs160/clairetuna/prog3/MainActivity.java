@@ -23,15 +23,18 @@ public class MainActivity extends Activity {
 	LocationActivity locationActivity;
 	Location userLocation; 
 	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main); 
 		Log.i("MyApplication", "Starting application");
 	    mImageMap = (ImageMap)findViewById(R.id.map);
-	
-    	//getTripInfo("24TH", "16TH");
-	    getStationInfo();
 	    locationActivity = new LocationActivity(this);
+    	//getTripInfo("24TH", "16TH");
+
+
+	    
+	    
         // add a click handler to react when areas are tapped
         mImageMap.addOnImageMapClickedHandler(new ImageMap.OnImageMapClickedHandler() {
             @Override
@@ -52,21 +55,41 @@ public class MainActivity extends Activity {
 		
 
 		
-		
+	    updateLocation();
+	   getStationInfo();
 	}
 
 	public void updateLocation(){
+		LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		locationActivity.checkLocation(manager);
 		userLocation = locationActivity.getLocation();
-		Double userLatitude = userLocation.getLatitude();
-		Double userLongitude = userLocation.getLongitude();
     	//LocationHelper locationHelper = new LocationHelper(this);
-    	
 	}
 	
+	public String closestStation(){
+		Log.i("MyApplication", "In MainActivity/closestStation");
+		float[] results = new float[2];
+		Log.i("MyApplication", "In MainActivity/closestStation before getLatitude");
+		Double userLatitude = userLocation.getLatitude();
+		Double userLongitude = userLocation.getLongitude();
+		Log.i("MyApplication", "In MainActivity/closestStation() after getting");
+		String closestStation=null;
+		float minDistance = Float.POSITIVE_INFINITY;
+		for (String key: stationCoordinates.keySet()){
+			Location.distanceBetween(userLatitude, userLongitude, stationCoordinates.get(key)[0],stationCoordinates.get(key)[1], results);
+			if (results[0]< minDistance){
+				minDistance=results[0];
+				closestStation = key;
+			}
+		}
+		Log.i("MyApplication", "Closest station is: " + closestStation);
+		return closestStation;
+	}
 	
 	public void setCoordinates(HashMap<String, Double[]> coords){
 		this.stationCoordinates=coords;
 		Log.i("MyApplication", "received coordinates in master");
+		closestStation();
 	}
 	
 	

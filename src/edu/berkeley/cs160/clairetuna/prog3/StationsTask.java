@@ -34,11 +34,10 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		
 		public void setMaster(MainActivity master){
 			this.master=master;
-			Log.i("MyApplication", "IN THE CLASS WTF");
 		}
 	    public String doInBackground(String...stations )
 	    {
-			Log.i("MyApplication", "LocationHelper in Do in background: visiting "+ stationsUrl);
+			Log.i("MyApplication", "StationsTask in Do in background: visiting "+ stationsUrl);
 	    		   HttpClient httpclient = new DefaultHttpClient();
 	    	       HttpResponse response;
 	    	       String responseString = null;
@@ -78,6 +77,7 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 	        if(results != null)
 	        {   
 	        	try {
+	        		Log.i("MyApplication", "Stationtask/onpostexecute try");
 		        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		 		   	DocumentBuilder builder = factory.newDocumentBuilder();
 		 		   	InputSource is = new InputSource(new StringReader(results));
@@ -92,11 +92,14 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		 	        	stationCoords[0]=Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_latitude").item(i).getTextContent());
 		 	        	stationCoords[1] = Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_longitude").item(i).getTextContent());
 		 	        	stationCoordinates.put(stationAbbrev, stationCoords);  }
+		 	       Log.i("MyApplication", "before setCoordinates");
 		 	        master.setCoordinates(stationCoordinates);
+		 	        
 		 	        
 	        	}
 	        	catch (Exception ex) {
-	        		Log.i("MyApplication", "Exception in on onPostExecute");
+	        		ex.printStackTrace();
+	        		Log.i("MyApplication", "Exception in on onPostExecute in StationsTask");
 	        		//do something
 	        	}
 	        }
