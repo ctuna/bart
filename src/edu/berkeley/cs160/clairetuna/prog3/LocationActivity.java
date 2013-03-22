@@ -26,7 +26,7 @@ public class LocationActivity implements LocationListener {
 	
 	
 	
-	public void checkLocation(LocationManager lm) {
+	public Location checkLocation(LocationManager lm) {
 
 		//initialize location manager
 		manager = lm;
@@ -43,13 +43,24 @@ public class LocationActivity implements LocationListener {
 	    	location = manager.getLastKnownLocation(providerName);
 	    	Log.i("MyApplication", "set location in LocationActivity");
 	    	if (location != null) {
-	    		
-	    	} else {
 	    		Log.i("MyApplication", "location was not null");
+	    		location.setLatitude(37.861969);
+	    		location.setLongitude(-122.253233);
+	    		Log.i("MyApplication", "users location is: (" + location.getLatitude() + "," + location.getLongitude()+")");
+	    	} else {
+	    		location = new Location("Blah");
+	    		Log.i("MyApplication", "location was null, set to derby");
+	    		location.setLatitude(37.861969);
+	    		location.setLongitude(-122.253233);
+
+	    		Log.i("MyApplication", "users location is: (" + location.getLatitude() + "," + location.getLongitude()+")");
+
 	    	}
 	    	//sign up to be notified of location updates every 15 seconds - for production code this should be at least a minute
-	    	manager.requestLocationUpdates(providerName, 60000, 1, this);
+	    	//manager.requestLocationUpdates(providerName, 15000, 1, this);
+	    	
 	    }
+		return location;
 	}
 
 	public Location getLocation(){
@@ -57,6 +68,8 @@ public class LocationActivity implements LocationListener {
 	}
 	@Override
 	public void onLocationChanged(Location location) {
+		this.location=location;
+		//master.updateLocation();
     	if (location != null) {
     		
     	} else {

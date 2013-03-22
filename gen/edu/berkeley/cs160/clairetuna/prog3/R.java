@@ -22,11 +22,13 @@ containing a value of this type.
         public static final int bart=0x7f020000;
         public static final int bartthick=0x7f020001;
         public static final int ic_launcher=0x7f020002;
-        public static final int usamap=0x7f020003;
+        public static final int pina=0x7f020003;
+        public static final int pinb=0x7f020004;
+        public static final int usamap=0x7f020005;
     }
     public static final class id {
         public static final int area20=0x7f080001;
-        public static final int map=0x7f080000;
+        public static final int mapholder=0x7f080000;
         public static final int menu_settings=0x7f080002;
     }
     public static final class layout {

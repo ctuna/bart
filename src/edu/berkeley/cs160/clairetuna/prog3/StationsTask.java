@@ -85,13 +85,16 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		 	        boolean foundTrip = false;
 		 	        int i = 0;
 		 	        String stationAbbrev;
-		 	        Double[] stationCoords = new Double[2];
+		 	        Double stationLatitude;
+		 	        Double stationLongitude;
 		 	        //there are 44 bart stations
 		 	        for (i=0; i<44;i++){
 		 	        	stationAbbrev = xmlDocument.getElementsByTagName("abbr").item(i).getTextContent();
-		 	        	stationCoords[0]=Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_latitude").item(i).getTextContent());
-		 	        	stationCoords[1] = Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_longitude").item(i).getTextContent());
-		 	        	stationCoordinates.put(stationAbbrev, stationCoords);  }
+		 	        	stationLatitude=Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_latitude").item(i).getTextContent());
+		 	        	stationLongitude = Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_longitude").item(i).getTextContent());
+		 	        	stationCoordinates.put(stationAbbrev, new Double [] {stationLatitude, stationLongitude});  
+		 	        	 Log.i("MyApplication", stationAbbrev + ": (" + stationLatitude + ", " + stationLongitude + ")");
+		 	        	}
 		 	       Log.i("MyApplication", "before setCoordinates");
 		 	        master.setCoordinates(stationCoordinates);
 		 	        
