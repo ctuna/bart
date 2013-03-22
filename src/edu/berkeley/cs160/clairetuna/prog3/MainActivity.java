@@ -27,8 +27,6 @@ import android.widget.ImageView;
 
 public class MainActivity extends Activity {
 	ImageMap mImageMap;
-	private Document xmlDocument;
-	Calendar rightNow = Calendar.getInstance();
 	LocationManager manager;
 	public TripCostTask task;
 	public StationsTask stationsTask;
@@ -36,19 +34,20 @@ public class MainActivity extends Activity {
 	LocationActivity locationActivity;
 	Location userLocation; 
 	MainView drawView;
+	ImageView pinA;
+	FrameLayout.LayoutParams pinParams;
+	FrameLayout fLayout;
 
-	
+	int width = 200, height =200,  pinAMarginLeft = 200, marginRight =0, pinAMarginTop = 100, marginBottom = 0;
 	
 	@Override
 	//Try BitmapFactory.decodeFile() and then setImageBitmap() on the ImageView.
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_main); 
-		drawView = new MainView(this);
-		FrameLayout fLayout = (FrameLayout)findViewById(R.id.mapholder);
-		fLayout.addView(drawView);
 		
-	
-
+		
+		instantiateLayout();
+		
 		
 		
 		super.onCreate(savedInstanceState);
@@ -72,9 +71,32 @@ public class MainActivity extends Activity {
 
 	FrameLayout myLayout;
 	FrameLayout.LayoutParams params;
-	int width = 200, height =200, x = 10, y = 20, marginLeft = 200, marginRight =0, marginTop = 100, marginBottom = 0;
 	
+public void instantiateLayout(){
+	drawView = new MainView(this);
+	fLayout = (FrameLayout)findViewById(R.id.mapholder);
+	fLayout.addView(drawView);
+	pinParams = new FrameLayout.LayoutParams(width, height);
+	
+	pinA = new ImageView(this);
+	Bitmap bitmapPinA = BitmapFactory.decodeResource(getResources(), R.drawable.pina);
+	pinA.setImageBitmap(bitmapPinA);
+	pinParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
+	fLayout.addView(pinA, pinParams);
+	int pinAMarginTop = getRelativeTop(pinA);
+	int pinAMarginLeft = getRelativeLeft(pinA);
+	Log.i("MyApplication", "pin A margin top is: " + pinAMarginTop);
+	Log.i("MyApplication", "pin A margin left is: " + pinAMarginLeft);
+}
+	private int getRelativeLeft(View myView) {
+	        return myView.getLeft();
+	}
 
+	private int getRelativeTop(View myView) {
+	        return myView.getTop();
+	}
+	
+	
 	public void drawSomething(){
 		
 	}
@@ -119,6 +141,14 @@ public class MainActivity extends Activity {
 		return closestStation;
 	}
 	
+	
+	
+	public boolean isOnPinA(float x, float y){
+		boolean xProper = (x>=pinAMarginLeft && x<=pinAMarginLeft + width);
+		boolean yProper = (y>=pinAMarginTop && y<= pinAMarginTop + height);
+		return xProper && yProper;
+	}
+	
 	public void setCoordinates(HashMap<String, Double[]> coords){
 		this.stationCoordinates=coords;
 		String s = closestStation();
@@ -161,8 +191,26 @@ public class MainActivity extends Activity {
 	}
 	
 	
+	public void movePinA(float dX, float dY){
+		pinAMarginLeft +=dX;
+		pinAMarginTop +=dY;
+		fLayout.removeView(pinA);
+		pinParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
+		fLayout.addView(pinA, pinParams);
+		
+		
+	}
 	
-	public class MainView extends FrameLayout {
+	
+	public int getPinAMarginLeft(){
+		return pinAMarginLeft;
+	}
+	
+	public int getPinAMarginTop(){
+		return pinAMarginTop;
+	}
+	
+	public class MainView extends View {
 
         private static final int BACKGROUND = Color.WHITE;
 
@@ -208,25 +256,9 @@ public class MainActivity extends Activity {
 			//vPath= new Path();
         }
         
-    	public void instantiateLayout(){
-    		FrameLayout.LayoutParams pinParams =  new FrameLayout.LayoutParams(width, height);
     		/**
-    		pinA = new ImageView(c);
-    		Bitmap bitmapPinA = BitmapFactory.decodeResource(getResources(), R.drawable.pina);
-    		pinA.setImageBitmap(bitmapPinA);
     		
-    		//params.setMargins(left, top, right, bottom)
-    		params.setMargins(marginLeft, marginTop, marginRight, marginBottom);
-    		addView(pinA, pinParams);*/
-    		
-
-    		ImageView testImage = new ImageView(c);
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-    		int mapId = getResources().getIdentifier("bartthick", "drawable", "edu.berkeley.cs160.clairetuna.prog3");
-    		Bitmap bitmapBartMap2  = BitmapFactory.decodeResource(getResources(), mapId, opts);
-
-    		testImage.setImageBitmap(bitmapBartMap2);   		
-    		addView(testImage, params);
+    	
     	}
 
         public void initializePaint(){
@@ -242,41 +274,55 @@ public class MainActivity extends Activity {
 			erasePaint.setStrokeWidth(500);
 			erasePaint.setColor(Color.WHITE);
         }
+        
         public void setColor(int color){
         	vPaint.setColor(color);
-        }
+        }*/
       
         
-        
+        Bitmap bgr;       
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
+            Log.i("MyApplication", "ONSIZECHANGED");
             int mapId= getResources().getIdentifier("bartthick", "drawable", "edu.berkeley.cs160.clairetuna.prog3");
-            Log.i("MyApplication", "MAP ID IS: " + mapId);
+           
           //  (Resources res, int id, BitmapFactory.Options opts) and specify inMutable
             BitmapFactory.Options opts = new BitmapFactory.Options();
             opts.inMutable=true;
             bitmapBartMap  = BitmapFactory.decodeResource(getResources(), mapId, opts);
+            vCanvas = new Canvas(bitmapBartMap);
+            
+            
+            
+            
             //originalBartMap = BitmapFactory.decodeResource(getResources(), R.drawable.bartthick);
             //bitmapBartMap  = BitmapFactory.decodeResource(getResources(), R.drawable.bartthick);
-            vCanvas = new Canvas(bitmapBartMap);
-            initializePaint();
+           // vCanvas = new Canvas(bitmapBartMap);
+           /* initializePaint();
             mode="scribble";
             startX=0;
             startY=0;
-            instantiateLayout();
+            //instantiateLayout();
+            Log.i("MyApplication", "end of onsizechanged");
+            invalidate();*/
         }
 
         
-        public void setMode(String newMode){
-        	mode=newMode;
-        }
+
         @Override
         protected void onDraw(Canvas canvas) {
+        	Log.i("MyApplication", "ONDRAW CALLED");
+        	Log.i("MyApplication", "BITMAP IS: " + bitmapBartMap);
             canvas.drawBitmap(bitmapBartMap, 0, 0, null);
             
         }
         
+        
+        
+        public void setMode(String newMode){
+        	mode=newMode;
+        }       
         public void clearCanvas(){
         	vPath.reset();
         	
@@ -295,175 +341,37 @@ public class MainActivity extends Activity {
         
         String mode; 
         public boolean onTouchEvent(MotionEvent event) {
-        	/**if (mode.equals("scribble")){
+        	/*if (mode.equals("scribble")){
         		vPaint.setStyle(Paint.Style.STROKE);
-        	}
+        	}*/
             newX = event.getX();
             newY = event.getY();
             float dX;
             float dY;
-            dX=newX-startX;
-    		dY=newY-startY;
-            if (mode.equals("circleStroke") || mode.equals("rectangleStroke")){
+            int oldMarginLeft = getPinAMarginLeft();
+            int oldMarginTop = getPinAMarginTop();
+            dX=newX-oldMarginLeft;
+    		dY=newY-oldMarginTop;
+            /*if (mode.equals("circleStroke") || mode.equals("rectangleStroke")){
             	vPaint.setStyle(Paint.Style.STROKE);
-            }
+            }*/
 
             if (event.getAction()== MotionEvent.ACTION_DOWN){
-            	newShape = true;
-            	startX = newX;
-        		startY=newY;
-        		vPaint.setStrokeCap(Paint.Cap.ROUND);
-        		vPath= new Path();
-                vPath.moveTo(newX, newY);
-                
-            	if (mode.equals("scribble")){
-                vPaint.setStyle(Paint.Style.STROKE);
-                vCanvas.drawPath(vPath, vPaint);
+            	if (isOnPinA(newX, newY)){
+            		Log.i("MyApplication", "clicked on pin!");
+            		
             	}
+            	
                 
                 }
            
             else if (event.getAction()== MotionEvent.ACTION_UP){
             	
-            	if (mode.equals("rectangleFill")){
-            		vPaint.setStyle(Paint.Style.FILL);}
-            	if (mode.equals("rectangleFill")|| mode.equals("rectangleStroke")){
-            		undo();
-            		drawRectangle(startX, startY, newX, newY);
-            		
-            		vPaint.setStrokeCap(Paint.Cap.SQUARE);
-            		
-            		vPath.reset();
-                    vPath.moveTo(startX, startY);
-            		//--->
-            		vPath.lineTo(startX+dX, startY);
-            		//down
-            		vPath.lineTo(startX+dX, startY+dY);
-            		//<------
-            		vPath.lineTo(startX, startY+dY);
-            		//^
-            		vPath.lineTo(startX, startY);
-            	}    
-            	
-
-            	if (mode.equals("circleFill")){
-            		vPaint.setStyle(Paint.Style.FILL);}
-            	
-            	if (mode.equals("circleFill")|| mode.equals("circleStroke")){
-            		undo();     			   
-            		float centerX = (startX+newX)/2;
-            		float centerY = (startY+newY)/2;
-            		vPaint.setStrokeCap(Paint.Cap.SQUARE);
-            		
-            		double diameter = Math.sqrt((Math.pow(dX, 2) + Math.pow(dY, 2)));
-            		float radius = (float) diameter/2;
-            		drawCircle(centerX, centerY, radius);
-            		vPath.reset();
-            		vPath.addCircle(centerX, centerY, radius, Path.Direction.CCW);
-            		
-            	}  
-            	else if (mode.equals("line")){
-            		           		
-      				undo();
-            		vPath= new Path();
-            		
-            		vPath.moveTo(startX, startY);
-            		vPath.lineTo(newX, newY);
-            		
-      		   		vCanvas.drawLine(startX, startY, newX, newY, vPaint);
-        	}
-            	else if (mode.equals("scribble")){
-            	
-            	
-            	}
-            	paths.add(vPath);
-            	paints.add(new Paint(vPaint));
-            	vPath = new Path();
-            	
             }
             else {
-         	   //DRAGGING
-         	   
-         	   if (newX!=startX && newY!=startY){
-         		   if (mode.equals("rectangleFill")|| mode.equals("rectangleStroke")){
-         			   //undo() versions of rectangle;
-         			   if (!newShape){
-         				   undo();
-         			   }
-         			   newShape=false;
-         		   		
-         		   
-         			   drawRectangle(startX, startY, newX, newY);
-
-         			   dX=newX-startX;
-         			   dY=newY-startY;
-            		
-         			   vPath= new Path();
-            		//make a path of current rectangle
-          		   		vPath.moveTo(startX, startY);
-            		//--->
-          		   		vPath.lineTo(startX+dX, startY);
-            		//down
-          		   		vPath.lineTo(startX+dX, startY+dY);
-            		//<------
-          		   		vPath.lineTo(startX, startY+dY);
-            		//^
-          		   		vPath.lineTo(startX, startY);
-            		//add to paths
-          		   		paths.add(vPath);
-          		   		paints.add(new Paint(vPaint));
-            		
-            	
-            		}
-         		   else if (mode.equals("circleFill")){
-                		vPaint.setStyle(Paint.Style.FILL);}
-                	if (mode.equals("circleFill")|| mode.equals("circleStroke")){
-                		if (!newShape){
-          				   undo();
-          			   }
-          			    newShape=false;
-                		float centerX = (startX+newX)/2;
-                		float centerY = (startY+newY)/2;
-                		vPaint.setStrokeCap(Paint.Cap.SQUARE);
-                		vPath= new Path();
-                		double diameter = Math.sqrt((Math.pow(dX, 2) + Math.pow(dY, 2)));
-                		float radius = (float) diameter/2;
-                		vPath.addCircle(centerX, centerY, radius, Path.Direction.CCW);
-                		drawCircle(centerX, centerY, radius);
-                		paths.add(vPath);
-          		   		paints.add(new Paint(vPaint));
-                		
-                	} 
-                	else if (mode.equals("line")){
-                		
-                    		if (!newShape){
-              				   undo();
-              			   }
-              			    newShape=false;
-                    		vPath= new Path();
-                    		vPath.moveTo(startX, startY);
-                    		vPath.lineTo(newX, newY);
-                    		paths.add(vPath);
-              		   		paints.add(new Paint(vPaint));
-              		   		vCanvas.drawLine(startX, startY, newX, newY, vPaint);
-                	}
-                	
-                else if (mode.equals("scribble")){
-             	vPath.quadTo(oldX, oldY, (oldX+newX)/2, (oldY+newY)/2);
-             	vCanvas.drawPath(vPath, vPaint);
-             	
-             	}
-             	
+            	movePinA(dX, dY);
          	   }
              	invalidate();
-             	
-             }
-         
-            
-            
-            oldX=newX;
-            oldY=newY;
-            */
          return true;   
         }
 
