@@ -479,6 +479,8 @@ Ticket ticket;
 	}
 	
 	public void movePinATo(float dX, float dY){
+		
+		Log.i("MyApplication", "called move pin A ");
 		pinAMarginLeft = (int) dX;
 		pinAMarginTop =(int)dY;
 		fLayout.removeView(pinA);
@@ -492,7 +494,7 @@ Ticket ticket;
 		pinBMarginLeft = (int) dX;
 		pinBMarginTop =(int)dY;
 		fLayout.removeView(pinB);
-		pinAParams.setMargins(pinBMarginLeft, pinBMarginTop, marginRight, marginBottom);
+		pinBParams.setMargins(pinBMarginLeft, pinBMarginTop, marginRight, marginBottom);
 		fLayout.addView(pinB, pinBParams);
 		
 		
@@ -714,6 +716,8 @@ Ticket ticket;
     			//Log.i("MyApplication", "removing from damaged last pin:" + lastPinALocation );
     			//Log.i("MyApplication", "damaged size is:" + damaged.size() );
     			drawStation(lastPinALocation, false);
+    			if (lastPinBLocation !=null){
+    			drawStation(lastPinBLocation, true);}
     		}
     		
     		if (bSelected && pinBDamaged.size()>0){
@@ -722,6 +726,8 @@ Ticket ticket;
     			//Log.i("MyApplication", "removing from damaged last pin:" + lastPinALocation );
     			//Log.i("MyApplication", "damaged size is:" + damaged.size() );
     			drawStation(lastPinBLocation, false);
+    			if (lastPinALocation!=null){
+    			drawStation(lastPinALocation, true);}
     		}
     		
             if (event.getAction()== MotionEvent.ACTION_DOWN){
