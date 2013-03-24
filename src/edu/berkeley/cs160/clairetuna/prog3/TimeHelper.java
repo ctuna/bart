@@ -51,14 +51,13 @@ public abstract class TimeHelper {
 		int hoursNow = Integer.parseInt(timeNow.split(":")[0]);
 		int hoursLeave = Integer.parseInt(timeLeave.split(":")[0]);
 		boolean isAfter = false;
-		if (timeNow.contains("AM") && timeLeave.contains("PM")){
-			hoursLeave+=12;
+		if (hoursNow == 11 && timeNow.contains("AM") && hoursLeave==12 && timeLeave.contains("PM")){
 			isAfter = true;
 		}
-		else if (timeNow.contains("PM") && timeLeave.contains("AM")){
-			hoursLeave+=12;
-			isAfter = false;
+		if (hoursNow == 11 && timeNow.contains("PM") && hoursLeave==12 && timeLeave.contains("AM")){
+			isAfter = true;
 		}
+		
 		//SAME AM/PM  VALUE
 		else {
 

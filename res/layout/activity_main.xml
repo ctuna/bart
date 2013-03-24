@@ -21,10 +21,10 @@
 
 
     </FrameLayout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="170dp"
     android:orientation="vertical"
     android:layout_marginLeft="30dp"
     android:layout_marginRight="30dp"
@@ -36,6 +36,6 @@
     
         
 
-</LinearLayout>
+</FrameLayout>
 
 </LinearLayout>

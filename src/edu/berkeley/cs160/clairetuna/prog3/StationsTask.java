@@ -32,7 +32,7 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		private final String API_KEY = "TJK4-R9EV-6R8E-UW7T";
 		private String stationsUrl = "http://api.bart.gov/api/stn.aspx?cmd=stns&key="+ API_KEY;
 		private Document xmlDocument;
-		
+		//DAT  GUY: leave
 		public void setMaster(MainActivity master){
 			this.master=master;
 		}

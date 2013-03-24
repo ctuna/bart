@@ -41,6 +41,16 @@ public class Ticket extends View {
     int width;
     int height;
     
+    
+    
+    int startCircleStart;
+    int radius;
+    int endCircleStart;
+    int topMargin;
+    int widthOfLine;
+    int midCircleStart;
+    
+    
     public void setStrokeWidth(int newWidth){
     	this.strokeWidth=newWidth;
     	vPaint.setStrokeWidth(strokeWidth);
@@ -97,7 +107,12 @@ public class Ticket extends View {
         initializePaint();
         //23 total
 
-
+        int startCircleStart = 60;
+        int radius = 20;
+        int endCircleStart = width - radius - startCircleStart;
+        int topMargin = height/4;
+        int widthOfLine = endCircleStart-startCircleStart;
+        int midCircleStart = widthOfLine/2 + startCircleStart + radius -20 ;
     }
 
     //
@@ -107,16 +122,31 @@ public class Ticket extends View {
     	 Log.i("MyApplication", "on draw called");
     	canvas.drawColor(getResources().getColor(R.color.StationColor));
         canvas.drawBitmap(vBitmap, 0, 0, null);
-        int circle1Start = 60;
-        int radius = 20;
-        int circle2Start = width - radius - circle1Start;
-        int topMargin = height/4;
+        startCircleStart = 60;
+        radius = 20;
+        endCircleStart = width - radius - startCircleStart;
+        topMargin = height/4;
+        widthOfLine = endCircleStart-startCircleStart;
+        midCircleStart = widthOfLine/2 + startCircleStart + radius -20 ;
         Paint p = new Paint();
         p.setStrokeWidth(30);
         p.setColor(getResources().getColor(R.color.LineColor));
-        canvas.drawLine(circle1Start+radius/2, topMargin, circle2Start-radius/2, topMargin, p);
-        canvas.drawCircle(circle1Start, topMargin, 20, new Paint());
-        canvas.drawCircle(circle2Start, topMargin, 20,  new Paint());
+        canvas.drawLine(startCircleStart+radius/2, topMargin, endCircleStart-radius/2, topMargin, p);
+        canvas.drawCircle(startCircleStart, topMargin, 20, new Paint());
+        canvas.drawCircle(endCircleStart, topMargin, 20,  new Paint());
+        canvas.drawCircle(midCircleStart, topMargin, 20,  new Paint());
+    }
+    
+    public int[] getStopCoords(String which){
+    	if (which.equals("start")){
+    		return new int[]{startCircleStart,topMargin};
+    	}
+    	else if (which.equals("transfer")){
+    		return new int[]{midCircleStart,topMargin};
+    	}
+    	else {
+    		return new int[]{endCircleStart,topMargin};
+    	}
     }
     
     public void drawStation(Polygon poly, boolean drawing){

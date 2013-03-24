@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -40,14 +40,14 @@ public class MainActivity extends Activity {
 	ImageView pinA;
 	FrameLayout.LayoutParams pinParams;
 	FrameLayout fLayout;
-	LinearLayout ticketHolder;
+	FrameLayout ticketHolder;
 	int width = 200, height =100,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0;
 	
 	@Override
 	//Try BitmapFactory.decodeFile() and then setImageBitmap() on the ImageView.
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_main); 
-		ticketHolder = (LinearLayout) findViewById(R.id.ticketholder);
+		ticketHolder = (FrameLayout) findViewById(R.id.ticketholder);
 		
 		
 		instantiateLayout();
@@ -81,21 +81,12 @@ public void instantiateLayout(){
 	int pinAMarginTop = getRelativeTop(pinA);
 	int pinAMarginLeft = getRelativeLeft(pinA);
 	
-	/**
-	TextView monkey = new TextView(this);
-	ViewGroup.MarginLayoutParams source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-	source.setMargins(0, 0, 0, 0);
-	monkey.setText("monkey");
-	monkey.setTextColor(Color.BLACK);
-	monkey.setTextSize(30);
-	LayoutParams p = new LayoutParams(source);
-	//monkey.setLayoutParams(params);
-	ticketHolder.addView(monkey, p);*/
 	
+
+
 	ticket = new Ticket(this);
 	ticketHolder.addView(ticket);
-	
-	
+
 	
 }
 Ticket ticket;
@@ -194,15 +185,73 @@ Ticket ticket;
 		stationsTask.execute();
 	}
 	
-	
+	TextView lastStart;
+	TextView lastTransfer;
+	TextView lastEnd;
 	public void updateTripInfo(){
-
-		Log.i("MyApplication", "in updateTripInfo");
 		String timeNow = task.getTimeNow();
 		String departureTime = task.getStartTime();
 		String fare = task.getFare();
 		String difference = TimeHelper.difference(timeNow, departureTime);
 		String train1 = task.getTrain1();
+		
+		
+
+		int stationTextSize= 15;
+		int fontSize = stationTextSize;
+		int topMargin = 80;
+		
+		if (lastStart !=null){
+			Log.i("plazadrama", "it was not null");
+			ticketHolder.removeView(lastStart);
+		}
+		TextView startStation = new TextView(this);
+		ViewGroup.MarginLayoutParams source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(40, topMargin, 0, 0);
+		String startStationString= drawView.lastPinALocation.getFullName();
+		startStation.setText(startStationString);
+
+		Log.i("plazadrama", "in updateTripInfo get full name of station is: " + startStationString);
+		startStation.setTextColor(Color.BLACK);
+		startStation.setTextSize(stationTextSize);
+		LayoutParams p = new LayoutParams(source);
+		startStation.setLayoutParams(p);
+		ticketHolder.addView(startStation, p);
+		lastStart=startStation;
+		
+		
+		if (lastTransfer !=null){
+			ticketHolder.removeView(lastTransfer);
+		}
+		TextView transferStation = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		String middleText = "Pittsburg";
+		transferStation.setText(middleText);
+		source.setMargins(400- (int)(middleText.length()*(fontSize*.7)), topMargin, 0, 0);
+		transferStation.setTextColor(Color.BLACK);
+		transferStation.setTextSize(stationTextSize);
+		p = new LayoutParams(source);
+		transferStation.setLayoutParams(p);
+		ticketHolder.addView(transferStation, p);
+		lastTransfer=transferStation;
+		
+
+		
+		if (lastEnd !=null){
+			ticketHolder.removeView(lastEnd);
+		}
+		TextView endStation = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		String endText = drawView.destinationFullName;
+		endStation.setText(endText);
+		source.setMargins( 650- endText.length()*(int)(fontSize*.7), topMargin, 0, 0);
+		endStation.setTextColor(Color.BLACK);
+		endStation.setTextSize(stationTextSize);
+		p = new LayoutParams(source);
+		endStation.setLayoutParams(p);
+		ticketHolder.addView(endStation, p);
+		lastEnd=endStation;
+		
 		
 		//journeyFrom.setText(drawView.getLastPinA().getFullName());
 		//journeyCost.setText("$"+fare);
@@ -318,7 +367,7 @@ Ticket ticket;
         Polygon p2;
         Polygon nullPolygon;
         Bitmap bgr;       
-
+        String destinationFullName = "Castro Valley";
         String Xprogram = "int[] xlala = {";
         String Yprogram = "int[] ylala = {";
        int coordCount = 0;
@@ -493,8 +542,8 @@ Ticket ticket;
             		if (!stationForCoord(newX, newY).getName().equals("NULL")){
             		
             			lastPinALocation = stationForCoord(newX, newY);
-            			getTripInfo(lastPinALocation.getName(), "cast");
-            			Log.i("MyApplication", "setting text to: " + lastPinALocation.getFullName());
+            			getTripInfo(lastPinALocation.getName(),"CAST");
+            			Log.i("plazadrama", "setting text to: " + lastPinALocation.getFullName());
             			
             			
             			
@@ -503,6 +552,7 @@ Ticket ticket;
             			//lastPinALocation = p1;
             			drawStation(lastPinALocation, true);
             			damaged.add(lastPinALocation);
+            			
             		}
             	}
             	}
