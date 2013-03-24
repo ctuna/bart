@@ -190,16 +190,24 @@ Ticket ticket;
 	TextView lastStart;
 	TextView lastTransfer;
 	TextView lastEnd;
+	TextView lastStartTime;
+	TextView lastEndTime;
+	
 	public void updateTripInfo(){
 		String timeNow = task.getTimeNow();
 		String departureTime = task.getStartTime();
+		String arrivalTime = task.getArrivalTime();
 		String fare = task.getFare();
 		String difference = TimeHelper.difference(timeNow, departureTime);
 		String train1 = task.getTrain1();
 
+		int grey = getResources().getColor(R.color.TitleText);
+		int white = getResources().getColor(R.color.ValueText);
+		
 		ticket.invalidate();
 
 		int stationTextSize= 15;
+		int timeTextSize = 15;
 		int fontSize = stationTextSize;
 		int topMargin = 80;
 		
@@ -210,17 +218,34 @@ Ticket ticket;
 		if (lastTrain1 != null){
 			ticketHolder.removeView(lastTrain1);
 		}
+		if (lastStartTime !=null){
+			ticketHolder.removeView(lastStartTime);
+		}
+		if (lastEndTime !=null){
+			ticketHolder.removeView(lastEndTime);
+		}
 		TextView startStation = new TextView(this);
 		ViewGroup.MarginLayoutParams source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 		source.setMargins(40, topMargin, 0, 0);
 		String startStationString= drawView.lastPinALocation.getFullName();
 		startStation.setText(startStationString);
-		startStation.setTextColor(Color.BLACK);
+		startStation.setTextColor(white);
 		startStation.setTextSize(stationTextSize);
 		LayoutParams p = new LayoutParams(source);
 		startStation.setLayoutParams(p);
 		ticketHolder.addView(startStation, p);
 		lastStart=startStation;
+		
+		TextView startTime = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(40, topMargin+30, 0, 0);
+		startTime.setText(departureTime);
+		startTime.setTextColor(white);
+		startTime.setTextSize(timeTextSize);
+		p = new LayoutParams(source);
+		startTime.setLayoutParams(p);
+		ticketHolder.addView(startTime, p);
+		lastStartTime=startTime;
 		
 		
 		train1 = stationNames.get(task.getTrain1());
@@ -244,7 +269,7 @@ Ticket ticket;
 			source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 			transferStation.setText(middleText.toUpperCase());
 			source.setMargins(390- (int)(middleText.length()*(fontSize*.7)), topMargin, 0, 0);
-			transferStation.setTextColor(Color.BLACK);
+			transferStation.setTextColor(white);
 			transferStation.setTextSize(stationTextSize);
 			p = new LayoutParams(source);
 			transferStation.setLayoutParams(p);
@@ -255,7 +280,7 @@ Ticket ticket;
 			
 			
 			source.setMargins(240- (int)(train1.length()*(fontSize*.7)), 20, 0, 0);
-			train1View.setTextColor(Color.BLACK);
+			train1View.setTextColor(grey);
 			train1View.setTextSize(stationTextSize);
 			p = new LayoutParams(source);
 			train1View.setLayoutParams(p);
@@ -267,7 +292,7 @@ Ticket ticket;
 			source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 			train2View.setText(train2.toUpperCase());
 			source.setMargins(560- (int)(train2.length()*(fontSize*.7)), 20, 0, 0);
-			train2View.setTextColor(Color.BLACK);
+			train2View.setTextColor(grey);
 
 			train2View.setTextSize(stationTextSize);
 			p = new LayoutParams(source);
@@ -279,7 +304,7 @@ Ticket ticket;
 		else {
 			//DOES NOT HAVE CONNECTION: PUT TRAIN IN MIDDLE
 			source.setMargins(400- (int)(train1.length()*(fontSize*.7)), 20, 0, 0);
-			train1View.setTextColor(Color.BLACK);
+			train1View.setTextColor(grey);
 			train1View.setTextSize(stationTextSize);
 			p = new LayoutParams(source);
 			train1View.setLayoutParams(p);
@@ -298,13 +323,24 @@ Ticket ticket;
 		String endText = stationNames.get(task.getStationDest());
 		endStation.setText(endText.toUpperCase());
 		source.setMargins( 650- endText.length()*(int)(fontSize*.7), topMargin, 0, 0);
-		endStation.setTextColor(Color.BLACK);
+		endStation.setTextColor(white);
 		endStation.setTextSize(stationTextSize);
 		p = new LayoutParams(source);
 		endStation.setLayoutParams(p);
 		ticketHolder.addView(endStation, p);
 		lastEnd=endStation;
 		
+		
+		TextView endTime = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(650- arrivalTime.length()*(int)(fontSize*.7), topMargin+30, 0, 0);
+		endTime.setText(arrivalTime);
+		endTime.setTextColor(white);
+		endTime.setTextSize(timeTextSize);
+		p = new LayoutParams(source);
+		endTime.setLayoutParams(p);
+		ticketHolder.addView(endTime, p);
+		lastEndTime=endTime;
 		
 		//journeyFrom.setText(drawView.getLastPinA().getFullName());
 		//journeyCost.setText("$"+fare);
@@ -590,7 +626,7 @@ Ticket ticket;
             }
             else {
             	if (mapPath.contains((int)newX, (int)newY)){  
-            	//if (mapPath.contains((int)dX-dXGrab + (width/2), (int)dY-dYGrab + height)){           	
+            	//if (mapPath.contains((int)newX-dXGrab + (width/2), (int)newY-dYGrab + height)){           	
             		movePinA(dX-dXGrab, dY-dYGrab);
             		if (!stationForCoord(newX, newY).getName().equals("NULL")){
             		

@@ -176,6 +176,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 		
 	}
 	
+
 	public void setMaster(MainActivity master){
 		Log.i("MyApplication", "Set master is called");
 		this.master=master;

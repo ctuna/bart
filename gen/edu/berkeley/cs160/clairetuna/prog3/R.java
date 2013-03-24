@@ -19,9 +19,12 @@ containing a value of this type.
         public static final int map=0x7f010000;
     }
     public static final class color {
-        public static final int LineColor=0x7f050001;
+        public static final int LineColor=0x7f050002;
         public static final int StationColor=0x7f050000;
-        public static final int colors=0x7f050002;
+        public static final int TicketBackground=0x7f050001;
+        public static final int TitleText=0x7f050003;
+        public static final int ValueText=0x7f050004;
+        public static final int colors=0x7f050005;
     }
     public static final class drawable {
         public static final int bart=0x7f020000;

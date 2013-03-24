@@ -120,8 +120,8 @@ public class Ticket extends View {
     @Override
     protected void onDraw(Canvas canvas) {
     	 Log.i("MyApplication", "on draw called");
-    	vCanvas.drawColor(getResources().getColor(R.color.StationColor));
-    	canvas.drawColor(getResources().getColor(R.color.StationColor));
+    	vCanvas.drawColor(getResources().getColor(R.color.TicketBackground));
+    	canvas.drawColor(getResources().getColor(R.color.TicketBackground));
         canvas.drawBitmap(vBitmap, 0, 0, null);
         startCircleStart = 60;
         radius = 20;
@@ -131,21 +131,23 @@ public class Ticket extends View {
         midCircleStart = widthOfLine/2 + startCircleStart + radius -20 ;
         Paint p = new Paint();
         Paint arrowPaint = new Paint();
+        Paint circlePaint = new Paint();
+        circlePaint.setColor(getResources().getColor(R.color.ValueText));
         p.setStrokeWidth(15);
         arrowPaint.setStrokeWidth(8);
-        p.setColor(getResources().getColor(R.color.LineColor));
-        arrowPaint.setColor(getResources().getColor(R.color.LineColor));
+        p.setColor(getResources().getColor(R.color.TitleText));
+        arrowPaint.setColor(getResources().getColor(R.color.TitleText));
         canvas.drawLine(startCircleStart+radius/2, topMargin, endCircleStart-radius/2, topMargin, p);
-        canvas.drawCircle(startCircleStart, topMargin, 20, new Paint());
+        canvas.drawCircle(startCircleStart, topMargin, 20, circlePaint);
 
         //draw arrows
         canvas.drawLine(endCircleStart-radius, topMargin, endCircleStart-40, 40, arrowPaint);
         canvas.drawLine(endCircleStart-radius, topMargin, endCircleStart-40, 72, arrowPaint);
-        canvas.drawCircle(endCircleStart, topMargin, 20,  new Paint());
+        canvas.drawCircle(endCircleStart, topMargin, 20,  circlePaint);
         if (hasTransfer) {
             canvas.drawLine(midCircleStart-radius, topMargin, midCircleStart-40, 40, arrowPaint);
             canvas.drawLine(midCircleStart-radius, topMargin, midCircleStart-40, 72, arrowPaint);
-        	canvas.drawCircle(midCircleStart, topMargin, 20,  new Paint());
+        	canvas.drawCircle(midCircleStart, topMargin, 20,  circlePaint);
         }
     }
     
