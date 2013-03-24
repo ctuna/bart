@@ -50,7 +50,7 @@ public abstract class TimeHelper {
 	public static boolean isAfter (String timeNow, String timeLeave){
 		int hoursNow = Integer.parseInt(timeNow.split(":")[0]);
 		int hoursLeave = Integer.parseInt(timeLeave.split(":")[0]);
-		boolean isAfter = false;
+		boolean isAfter=false;
 		if (hoursNow == 11 && timeNow.contains("AM") && hoursLeave==12 && timeLeave.contains("PM")){
 			isAfter = true;
 		}
@@ -61,7 +61,7 @@ public abstract class TimeHelper {
 		//SAME AM/PM  VALUE
 		else {
 
-			int minutesNow = Integer.parseInt(timeNow.split(":")[1].substring(0, 2))-40;
+			int minutesNow = Integer.parseInt(timeNow.split(":")[1].substring(0, 2));
 			int minutesLeave = Integer.parseInt(timeLeave.split(":")[1].substring(0, 2));
 			if (hoursNow == hoursLeave){
 				isAfter = minutesNow < minutesLeave;

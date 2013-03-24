@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<color name="StationColor">#6d8082</color>
-<color name= "TicketBackground">#6d8082</color>
+<color name="StationColor">#abced1</color>
+<color name= "TicketBackground">#5a979e</color>
 <color name="LineColor">#6c6d6d</color>
  <color name= "TitleText">#bfc1c1</color>
 <color name= "ValueText">#ffffff</color>

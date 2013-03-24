@@ -39,10 +39,12 @@ public class MainActivity extends Activity {
 	Location userLocation; 
 	MainView drawView;
 	ImageView pinA;
-	FrameLayout.LayoutParams pinParams;
+	ImageView pinB;
+	FrameLayout.LayoutParams pinAParams;
+	FrameLayout.LayoutParams pinBParams;
 	FrameLayout fLayout;
 	FrameLayout ticketHolder;
-	int width = 200, height =100,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0;
+	int width = 200, height =100,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0, pinBMarginLeft=80, pinBMarginTop=80;
 	
 	@Override
 	//Try BitmapFactory.decodeFile() and then setImageBitmap() on the ImageView.
@@ -73,17 +75,21 @@ public void instantiateLayout(){
 	drawView = new MainView(this);
 	fLayout = (FrameLayout)findViewById(R.id.mapholder);
 	fLayout.addView(drawView);
-	pinParams = new FrameLayout.LayoutParams(width, height);
+	pinAParams = new FrameLayout.LayoutParams(width, height);
+	pinBParams = new FrameLayout.LayoutParams(width, height);
 	
 	pinA = new ImageView(this);
 	Bitmap bitmapPinA = BitmapFactory.decodeResource(getResources(), R.drawable.pina);
 	pinA.setImageBitmap(bitmapPinA);
-	pinParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
-	fLayout.addView(pinA, pinParams);
-	int pinAMarginTop = getRelativeTop(pinA);
-	int pinAMarginLeft = getRelativeLeft(pinA);
+	pinAParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
+	fLayout.addView(pinA, pinAParams);
 	
 	
+	pinB = new ImageView(this);
+	Bitmap bitmapPinB = BitmapFactory.decodeResource(getResources(), R.drawable.pinb);
+	pinB.setImageBitmap(bitmapPinB);
+	pinBParams.setMargins(pinBMarginLeft, pinBMarginTop, marginRight, marginBottom);
+	fLayout.addView(pinB, pinBParams);
 
 
 	ticket = new Ticket(this);
@@ -157,6 +163,12 @@ Ticket ticket;
 		return xProper && yProper;
 	}
 	
+	public boolean isOnPinB(float x, float y){
+		boolean xProper = (x>=pinBMarginLeft && x<=pinBMarginLeft + width);
+		boolean yProper = (y>=pinBMarginTop && y<= pinBMarginTop + height);
+		return xProper && yProper;
+	}
+	
 	public void setCoordinates(HashMap<String, Double[]> coords){
 		this.stationCoordinates=coords;
 		//String s = closestStation();
@@ -192,7 +204,14 @@ Ticket ticket;
 	TextView lastEnd;
 	TextView lastStartTime;
 	TextView lastEndTime;
-	
+	TextView oneWayTitle;
+	TextView oneWayValue;
+	TextView roundTripTitle;
+	TextView roundTripValue;
+	TextView lastOneWay;
+	TextView lastRoundTrip;
+	TextView lastStartTimeDifference;
+	TextView lastEndTimeDifference;
 	public void updateTripInfo(){
 		String timeNow = task.getTimeNow();
 		String departureTime = task.getStartTime();
@@ -208,6 +227,7 @@ Ticket ticket;
 
 		int stationTextSize= 15;
 		int timeTextSize = 15;
+		int fareTextSize=25;
 		int fontSize = stationTextSize;
 		int topMargin = 80;
 		
@@ -224,6 +244,22 @@ Ticket ticket;
 		if (lastEndTime !=null){
 			ticketHolder.removeView(lastEndTime);
 		}
+		if (lastOneWay!=null){
+			ticketHolder.removeView(lastOneWay);
+		}
+	
+		if (lastRoundTrip!=null){
+			ticketHolder.removeView(lastRoundTrip);
+		}
+		if (lastStartTimeDifference!=null){
+			ticketHolder.removeView(lastStartTimeDifference);
+		}
+		
+		if (lastEndTimeDifference!=null){
+			ticketHolder.removeView(lastEndTimeDifference);
+		}
+
+		
 		TextView startStation = new TextView(this);
 		ViewGroup.MarginLayoutParams source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 		source.setMargins(40, topMargin, 0, 0);
@@ -246,6 +282,76 @@ Ticket ticket;
 		startTime.setLayoutParams(p);
 		ticketHolder.addView(startTime, p);
 		lastStartTime=startTime;
+		
+
+		TextView startTimeDifference = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(40+80, topMargin+30, 0, 0);
+		startTimeDifference.setText("(" + difference+ ")");
+		startTimeDifference.setTextColor(grey);
+		startTimeDifference.setTextSize(timeTextSize);
+		p = new LayoutParams(source);
+		startTimeDifference.setLayoutParams(p);
+		ticketHolder.addView(startTimeDifference, p);
+		lastStartTimeDifference=startTimeDifference;
+		
+		
+		TextView oneWayTitle = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(40, topMargin+80, 0, 0);
+		oneWayTitle.setText("one-way:");
+		oneWayTitle.setTextColor(grey);
+		oneWayTitle.setTextSize(fareTextSize);
+		p = new LayoutParams(source);
+		oneWayTitle.setLayoutParams(p);
+		ticketHolder.addView(oneWayTitle, p);
+		
+		
+		TextView oneWayValue = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(40 + 150, topMargin+80, 0, 0);
+		oneWayValue.setText("$" +fare);
+		oneWayValue.setTextColor(white);
+		oneWayValue.setTextSize(fareTextSize);
+		p = new LayoutParams(source);
+		oneWayValue.setLayoutParams(p);
+		ticketHolder.addView(oneWayValue, p);
+		lastOneWay=oneWayValue;
+		
+		
+		TextView roundTripTitle = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(300, topMargin+80, 0, 0);
+		roundTripTitle.setText("round-trip:");
+		roundTripTitle.setTextColor(grey);
+		roundTripTitle.setTextSize(fareTextSize);
+		p = new LayoutParams(source);
+		roundTripTitle.setLayoutParams(p);
+		ticketHolder.addView(roundTripTitle, p);
+		
+		
+		TextView roundTripValue = new TextView(this);
+		String roundTripCostString;
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		source.setMargins(300 + 170, topMargin+80, 0, 0);
+		float roundTripCost = Float.parseFloat(fare)*2;
+		if (Float.toString(roundTripCost).split("\\.")[1].length()==1){
+			roundTripCostString= Float.toString(roundTripCost) + "0";
+		}
+		else if (Float.toString(roundTripCost).split("\\.")[1] == null || Float.toString(roundTripCost).split("\\.")[1].length()==0){
+			roundTripCostString= Float.toString(roundTripCost) + "00";
+		}
+		else{
+			roundTripCostString= Float.toString(roundTripCost);
+		}
+		
+		roundTripValue.setText("$" +roundTripCostString);
+		roundTripValue.setTextColor(white);
+		roundTripValue.setTextSize(fareTextSize);
+		p = new LayoutParams(source);
+		roundTripValue.setLayoutParams(p);
+		ticketHolder.addView(roundTripValue, p);
+		lastRoundTrip=roundTripValue;
 		
 		
 		train1 = stationNames.get(task.getTrain1());
@@ -357,22 +463,40 @@ Ticket ticket;
 		pinAMarginLeft +=dX;
 		pinAMarginTop +=dY;
 		fLayout.removeView(pinA);
-		pinParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
-		fLayout.addView(pinA, pinParams);
-		
-		
+		pinAParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
+		fLayout.addView(pinA, pinAParams);
+
+	}
+	
+	
+	public void movePinB(float dX, float dY){
+		pinBMarginLeft +=dX;
+		pinBMarginTop +=dY;
+		fLayout.removeView(pinB);
+		pinBParams.setMargins(pinBMarginLeft, pinBMarginTop, marginRight, marginBottom);
+		fLayout.addView(pinB, pinBParams);
+
 	}
 	
 	public void movePinATo(float dX, float dY){
 		pinAMarginLeft = (int) dX;
 		pinAMarginTop =(int)dY;
 		fLayout.removeView(pinA);
-		pinParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
-		fLayout.addView(pinA, pinParams);
+		pinAParams.setMargins(pinAMarginLeft, pinAMarginTop, marginRight, marginBottom);
+		fLayout.addView(pinA, pinAParams);
 		
 		
 	}
 	
+	public void movePinBTo(float dX, float dY){
+		pinBMarginLeft = (int) dX;
+		pinBMarginTop =(int)dY;
+		fLayout.removeView(pinB);
+		pinAParams.setMargins(pinBMarginLeft, pinBMarginTop, marginRight, marginBottom);
+		fLayout.addView(pinB, pinBParams);
+		
+		
+	}
 	
 	public int getPinAMarginLeft(){
 		return pinAMarginLeft;
@@ -380,6 +504,14 @@ Ticket ticket;
 	
 	public int getPinAMarginTop(){
 		return pinAMarginTop;
+	}
+	
+	public int getPinBMarginLeft(){
+		return pinBMarginLeft;
+	}
+	
+	public int getPinBMarginTop(){
+		return pinBMarginTop;
 	}
 	
 	public class MainView extends View {
@@ -425,33 +557,13 @@ Ticket ticket;
         	
             super(c);
             this.c=c;
-			//vPath= new Path();
+			
         }
         
-    		/**
-    		
-    	
-    	}
 
-        public void initializePaint(){
-        	strokeWidth=30;
-            vPaint= new Paint();
-			vPaint.setStrokeWidth(strokeWidth);
-            vPaint.setColor(Color.BLACK);
-			vPaint.setStyle(Paint.Style.STROKE);
-			vPaint.setStrokeWidth(strokeWidth);
-			vPaint.setStrokeCap(Paint.Cap.ROUND);
-			vPaint.setAntiAlias(true);
-			erasePaint = new Paint();
-			erasePaint.setStrokeWidth(500);
-			erasePaint.setColor(Color.WHITE);
-        }
-        
-        public void setColor(int color){
-        	vPaint.setColor(color);
-        }*/
-      
         Polygon mapPath;
+        boolean aSelected;
+        boolean bSelected;
         Polygon p1;
         Polygon p2;
         Polygon nullPolygon;
@@ -460,16 +572,19 @@ Ticket ticket;
         String Xprogram = "int[] xlala = {";
         String Yprogram = "int[] ylala = {";
        int coordCount = 0;
-        float dXGrab;
-        float dYGrab;
+        float pinAdXGrab;
+        float pinAdYGrab;
+        float pinBdXGrab;
+        float pinBdYGrab;
         boolean newShape=false;
-        ArrayList<Polygon> damaged = new ArrayList<Polygon>();
+        ArrayList<Polygon> pinADamaged = new ArrayList<Polygon>();
+        ArrayList<Polygon> pinBDamaged = new ArrayList<Polygon>();
         ArrayList<Polygon> stations = new ArrayList<Polygon>();
         String mode; 
         Polygon lastPinALocation;
-        
+        Polygon lastPinBLocation;
         float[] lastPinACoords = {0, 0};
-        
+        float[] lastPinBCoords = {0, 0};
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
@@ -570,79 +685,124 @@ Ticket ticket;
             newY = event.getY();
             
             Log.i("MyApplication", "LAST PIN A COORDS ARE: (" + lastPinACoords[0] + ", " + lastPinACoords[1]+")");
-            float dX;
-            float dY;
-            int oldMarginLeft = getPinAMarginLeft();
-            int oldMarginTop = getPinAMarginTop();
+            float pinAdX;
+            float pinAdY;
+            float pinBdX;
+            float pinBdY;
+            int oldPinAMarginLeft = getPinAMarginLeft();
+            int oldPinAMarginTop = getPinAMarginTop();
+            int oldPinBMarginLeft = getPinBMarginLeft();
+            int oldPinBMarginTop = getPinBMarginTop();
             
-            int oldPinX= oldMarginLeft + (width/2);
-            int oldPinY= oldMarginTop + height;
+            int oldPinX= oldPinAMarginLeft + (width/2);
+            int oldPinY= oldPinAMarginTop + height;
 
-            dX=newX-oldMarginLeft;
-    		dY=newY-oldMarginTop;
+            pinAdX=newX-oldPinAMarginLeft;
+    		pinAdY=newY-oldPinAMarginTop;
+    		
+            pinBdX=newX-oldPinBMarginLeft;
+    		pinBdY=newY-oldPinBMarginTop;
             /*if (mode.equals("circleStroke") || mode.equals("rectangleStroke")){
             	vPaint.setStyle(Paint.Style.STROKE);
             }*/
 
             
             
-    		if (damaged.size()>0){
+    		if (aSelected && pinADamaged.size()>0){
     			//Log.i("MyApplication", "damaged size is:" + damaged.size() );
-    			lastPinALocation = damaged.remove(0);
+    			lastPinALocation = pinADamaged.remove(0);
     			//Log.i("MyApplication", "removing from damaged last pin:" + lastPinALocation );
     			//Log.i("MyApplication", "damaged size is:" + damaged.size() );
     			drawStation(lastPinALocation, false);
     		}
     		
+    		if (bSelected && pinBDamaged.size()>0){
+    			//Log.i("MyApplication", "damaged size is:" + damaged.size() );
+    			lastPinBLocation = pinBDamaged.remove(0);
+    			//Log.i("MyApplication", "removing from damaged last pin:" + lastPinALocation );
+    			//Log.i("MyApplication", "damaged size is:" + damaged.size() );
+    			drawStation(lastPinBLocation, false);
+    		}
+    		
             if (event.getAction()== MotionEvent.ACTION_DOWN){
-            	if (isOnPinA(newX, newY)){
+            	if (isOnPinA(newX, newY) && !bSelected){
             		//how far into the pin
+            	aSelected=true;
+        		pinAdXGrab=newX-oldPinAMarginLeft;
+        		pinAdYGrab=newY-oldPinAMarginTop;
             	}
-        		dXGrab=newX-oldMarginLeft;
-        		dYGrab=newY-oldMarginTop;
+            	else if (isOnPinB(newX, newY) && !aSelected){
+            		//how far into the pin
+            	bSelected=true;
+        		pinBdXGrab=newX-oldPinBMarginLeft;
+        		pinBdYGrab=newY-oldPinBMarginTop;
+            	}
             	Xprogram+= String.valueOf(newX).split("\\.")[0] + ",";
             	Yprogram+= String.valueOf(newY).split("\\.")[0] + ",";
                  //coordCount++;
                 }
            
             else if (event.getAction()== MotionEvent.ACTION_UP){
-
+            	Log.i("MyApplication", "Releasing with a selected: " + aSelected + "B selected: " + bSelected);
         			
-            		if (lastPinALocation!=null){
+            		if (lastPinALocation!=null && aSelected){
             		
             		movePinATo(lastPinACoords[0], lastPinACoords[1]);
             		drawStation(lastPinALocation, true);
-        			damaged.add(lastPinALocation);
+        			pinADamaged.add(lastPinALocation);
         			
             		}
-            	
-            	/**
-            	drawStuff();
-        		if (mapPath.contains((int)newX, (int)newY)){
-        			Log.i("MyApplication", "CLICK IS ON PATH");
-        		}
-            	;*/
+            		
+            		if (lastPinBLocation!=null&& bSelected){
+                		
+                		movePinBTo(lastPinBCoords[0], lastPinBCoords[1]);
+                		drawStation(lastPinBLocation, true);
+            			pinBDamaged.add(lastPinBLocation);
+            			
+                		}
+
+            		aSelected=false;
+            		bSelected=false;
             	//Log.i("MyApplication", "Coords with count "+ coordCount + Xprogram + " " + Yprogram);
             }
             else {
             	if (mapPath.contains((int)newX, (int)newY)){  
             	//if (mapPath.contains((int)newX-dXGrab + (width/2), (int)newY-dYGrab + height)){           	
-            		movePinA(dX-dXGrab, dY-dYGrab);
-            		if (!stationForCoord(newX, newY).getName().equals("NULL")){
-            		
-            			lastPinALocation = stationForCoord(newX, newY);
-            			getTripInfo(lastPinALocation.getName(),"24TH");
-            			Log.i("plazadrama", "setting text to: " + lastPinALocation.getFullName());
-            			
-            			
-            			
-            			lastPinACoords[0]=oldMarginLeft + dX-dXGrab;
-            			lastPinACoords[1]=oldMarginTop +  dY- dYGrab;
-            			//lastPinALocation = p1;
-            			drawStation(lastPinALocation, true);
-            			damaged.add(lastPinALocation);
-            			
+            		if (aSelected){
+            			movePinA(pinAdX-pinAdXGrab, pinAdY-pinAdYGrab);
+                		if (!stationForCoord(newX, newY).getName().equals("NULL")){
+                		
+                			lastPinALocation = stationForCoord(newX, newY);
+                			
+                			if (lastPinBLocation!=null){
+                			getTripInfo(lastPinALocation.getName(),lastPinBLocation.getName());
+                			}
+                			lastPinACoords[0]=oldPinAMarginLeft + pinAdX-pinAdXGrab;
+                			lastPinACoords[1]=oldPinAMarginTop +  pinAdY- pinAdYGrab;
+                			//lastPinALocation = p1;
+                			drawStation(lastPinALocation, true);
+                			pinADamaged.add(lastPinALocation);
+                			
+                		}
             		}
+            		else if (bSelected){
+            			movePinB(pinBdX-pinBdXGrab, pinBdY-pinBdYGrab);
+                		if (!stationForCoord(newX, newY).getName().equals("NULL")){
+                		
+                			lastPinBLocation = stationForCoord(newX, newY);
+                			
+                			if (lastPinALocation !=null){
+                			getTripInfo(lastPinALocation.getName(),lastPinBLocation.getName());
+                			}
+                			lastPinBCoords[0]=oldPinBMarginLeft + pinBdX-pinBdXGrab;
+                			lastPinBCoords[1]=oldPinBMarginTop +  pinBdY- pinBdYGrab;
+                			//lastPinALocation = p1;
+                			drawStation(lastPinBLocation, true);
+                			pinBDamaged.add(lastPinBLocation);
+                			
+                		}
+            		}
+            		
             	}
             	}
             invalidate();
