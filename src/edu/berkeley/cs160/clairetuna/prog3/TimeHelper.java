@@ -61,7 +61,7 @@ public abstract class TimeHelper {
 		//SAME AM/PM  VALUE
 		else {
 
-			int minutesNow = Integer.parseInt(timeNow.split(":")[1].substring(0, 2));
+			int minutesNow = Integer.parseInt(timeNow.split(":")[1].substring(0, 2))-20;
 			int minutesLeave = Integer.parseInt(timeLeave.split(":")[1].substring(0, 2));
 			if (hoursNow == hoursLeave){
 				isAfter = minutesNow < minutesLeave;

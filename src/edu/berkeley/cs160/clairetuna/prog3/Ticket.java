@@ -120,6 +120,7 @@ public class Ticket extends View {
     @Override
     protected void onDraw(Canvas canvas) {
     	 Log.i("MyApplication", "on draw called");
+    	vCanvas.drawColor(getResources().getColor(R.color.StationColor));
     	canvas.drawColor(getResources().getColor(R.color.StationColor));
         canvas.drawBitmap(vBitmap, 0, 0, null);
         startCircleStart = 60;
@@ -134,7 +135,7 @@ public class Ticket extends View {
         canvas.drawLine(startCircleStart+radius/2, topMargin, endCircleStart-radius/2, topMargin, p);
         canvas.drawCircle(startCircleStart, topMargin, 20, new Paint());
         canvas.drawCircle(endCircleStart, topMargin, 20,  new Paint());
-        canvas.drawCircle(midCircleStart, topMargin, 20,  new Paint());
+
     }
     
     public int[] getStopCoords(String which){
@@ -148,6 +149,12 @@ public class Ticket extends View {
     		return new int[]{endCircleStart,topMargin};
     	}
     }
+    
+    public void drawTransfer(){
+        vCanvas.drawCircle(midCircleStart, topMargin, 20,  new Paint());
+        invalidate();
+    }
+    
     
     public void drawStation(Polygon poly, boolean drawing){
     	int color;
@@ -193,6 +200,5 @@ public class Ticket extends View {
     	}
 		
 		vCanvas.drawCircle(x, y, radius, new Paint());
-		invalidate();
 	}
 }

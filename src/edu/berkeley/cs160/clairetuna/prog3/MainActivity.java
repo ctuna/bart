@@ -2,6 +2,7 @@ package edu.berkeley.cs160.clairetuna.prog3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -194,8 +195,8 @@ Ticket ticket;
 		String fare = task.getFare();
 		String difference = TimeHelper.difference(timeNow, departureTime);
 		String train1 = task.getTrain1();
-		
-		
+
+		ticket.invalidate();
 
 		int stationTextSize= 15;
 		int fontSize = stationTextSize;
@@ -210,8 +211,6 @@ Ticket ticket;
 		source.setMargins(40, topMargin, 0, 0);
 		String startStationString= drawView.lastPinALocation.getFullName();
 		startStation.setText(startStationString);
-
-		Log.i("plazadrama", "in updateTripInfo get full name of station is: " + startStationString);
 		startStation.setTextColor(Color.BLACK);
 		startStation.setTextSize(stationTextSize);
 		LayoutParams p = new LayoutParams(source);
@@ -220,30 +219,34 @@ Ticket ticket;
 		lastStart=startStation;
 		
 		
-		if (lastTransfer !=null){
-			ticketHolder.removeView(lastTransfer);
-		}
-		TextView transferStation = new TextView(this);
-		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		String middleText = "Pittsburg";
-		transferStation.setText(middleText);
-		source.setMargins(400- (int)(middleText.length()*(fontSize*.7)), topMargin, 0, 0);
-		transferStation.setTextColor(Color.BLACK);
-		transferStation.setTextSize(stationTextSize);
-		p = new LayoutParams(source);
-		transferStation.setLayoutParams(p);
-		ticketHolder.addView(transferStation, p);
-		lastTransfer=transferStation;
-		
 
+		if (task.hasConnection()){
+			String train2 = task.getTrain2();
+			String middleText = stationNames.get(task.getTransferStation());
+			if (lastTransfer !=null){
+				ticketHolder.removeView(lastTransfer);
+			}
+			TextView transferStation = new TextView(this);
+			source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+
+			transferStation.setText(middleText.toUpperCase());
+			source.setMargins(400- (int)(middleText.length()*(fontSize*.7)), topMargin, 0, 0);
+			transferStation.setTextColor(Color.BLACK);
+			transferStation.setTextSize(stationTextSize);
+			p = new LayoutParams(source);
+			transferStation.setLayoutParams(p);
+			ticketHolder.addView(transferStation, p);
+			lastTransfer=transferStation;
+			ticket.drawTransfer();
+		}
 		
 		if (lastEnd !=null){
 			ticketHolder.removeView(lastEnd);
 		}
 		TextView endStation = new TextView(this);
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		String endText = drawView.destinationFullName;
-		endStation.setText(endText);
+		String endText = stationNames.get(task.getStationDest());
+		endStation.setText(endText.toUpperCase());
 		source.setMargins( 650- endText.length()*(int)(fontSize*.7), topMargin, 0, 0);
 		endStation.setTextColor(Color.BLACK);
 		endStation.setTextSize(stationTextSize);

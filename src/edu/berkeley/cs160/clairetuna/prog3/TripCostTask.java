@@ -38,10 +38,13 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     private String transferStation;
     private String train1;
     private String train2;
+    private String stationOrig;
+    private String stationDest;
+    
     public String doInBackground(String...stations )
     {
-    	String stationOrig = stations[0];
-    	String stationDest = stations[1];
+    	stationOrig = stations[0];
+    	stationDest = stations[1];
     	url = "http://api.bart.gov/api/sched.aspx?key=MW9S-E7SL-26DU-VV8V&cmd=depart&orig="+stationOrig+"&dest="+stationDest;
     	Log.i("MyApplication", "Going to the url: "+ url);
     		   HttpClient httpclient = new DefaultHttpClient();
@@ -186,6 +189,16 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	public String getTrain2(){
 		return train2;
 	}
-
+	
+	public String getTransferStation(){
+		return transferStation;
+	}
+	
+	public String getStationOrig(){
+		return stationOrig;
+	}
+	public String getStationDest(){
+		return stationDest;
+	}
     }
     
