@@ -45,6 +45,8 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     {
     	stationOrig = stations[0];
     	stationDest = stations[1];
+    	
+    	Log.i("MyApplication", "station dest is: "+stations[1]);
     	url = "http://api.bart.gov/api/sched.aspx?key=MW9S-E7SL-26DU-VV8V&cmd=depart&orig="+stationOrig+"&dest="+stationDest;
     	Log.i("MyApplication", "Going to the url: "+ url);
     		   HttpClient httpclient = new DefaultHttpClient();
@@ -100,10 +102,11 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 	        fare = currentTripAttributes.getNamedItem("fare").getNodeValue();
 	 	        startTime = currentTripAttributes.getNamedItem("origTimeMin").getNodeValue();
 	 	        arrivalTime = currentTripAttributes.getNamedItem("destTimeMin").getNodeValue();
+	 	       train1=currentTrip.getChildNodes().item(0).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
 	 	        if (currentTrip.getChildNodes().getLength()==2){
 	 	        	hasConnection = true;
 	 	        	transferStation = currentTrip.getChildNodes().item(0).getAttributes().getNamedItem("destination").getNodeValue();
-	 	        	train1=currentTrip.getChildNodes().item(0).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
+	 	        	
 	 	        	train2=currentTrip.getChildNodes().item(1).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
 	 	        	
 	 	        	Log.i("MyApplication", "Take " + train1 + " to " + transferStation + ", " + train2 + " to destination");

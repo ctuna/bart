@@ -67,7 +67,8 @@ public class MainActivity extends Activity {
 
 	FrameLayout myLayout;
 	FrameLayout.LayoutParams params;
-	
+	TextView lastTrain1;
+	TextView lastTrain2;
 public void instantiateLayout(){
 	drawView = new MainView(this);
 	fLayout = (FrameLayout)findViewById(R.id.mapholder);
@@ -206,6 +207,9 @@ Ticket ticket;
 			Log.i("plazadrama", "it was not null");
 			ticketHolder.removeView(lastStart);
 		}
+		if (lastTrain1 != null){
+			ticketHolder.removeView(lastTrain1);
+		}
 		TextView startStation = new TextView(this);
 		ViewGroup.MarginLayoutParams source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 		source.setMargins(40, topMargin, 0, 0);
@@ -219,9 +223,18 @@ Ticket ticket;
 		lastStart=startStation;
 		
 		
-
+		train1 = stationNames.get(task.getTrain1());
+		TextView train1View = new TextView(this);
+		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		train1View.setText(train1.toUpperCase());
+		
+		if (lastTrain2 != null){
+			ticketHolder.removeView(lastTrain2);
+		}
 		if (task.hasConnection()){
 			String train2 = task.getTrain2();
+			
+			
 			String middleText = stationNames.get(task.getTransferStation());
 			ticket.hasTransfer=true;
 			if (lastTransfer !=null){
@@ -229,9 +242,8 @@ Ticket ticket;
 			}
 			TextView transferStation = new TextView(this);
 			source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-
 			transferStation.setText(middleText.toUpperCase());
-			source.setMargins(400- (int)(middleText.length()*(fontSize*.7)), topMargin, 0, 0);
+			source.setMargins(390- (int)(middleText.length()*(fontSize*.7)), topMargin, 0, 0);
 			transferStation.setTextColor(Color.BLACK);
 			transferStation.setTextSize(stationTextSize);
 			p = new LayoutParams(source);
@@ -239,6 +251,41 @@ Ticket ticket;
 			ticketHolder.addView(transferStation, p);
 			lastTransfer=transferStation;
 			ticket.drawTransfer();
+			
+			
+			
+			source.setMargins(240- (int)(train1.length()*(fontSize*.7)), 20, 0, 0);
+			train1View.setTextColor(Color.BLACK);
+			train1View.setTextSize(stationTextSize);
+			p = new LayoutParams(source);
+			train1View.setLayoutParams(p);
+			ticketHolder.addView(train1View, p);
+			lastTrain1=train1View;
+			
+			train2 = stationNames.get(task.getTrain2());
+			TextView train2View = new TextView(this);
+			source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+			train2View.setText(train2.toUpperCase());
+			source.setMargins(560- (int)(train2.length()*(fontSize*.7)), 20, 0, 0);
+			train2View.setTextColor(Color.BLACK);
+
+			train2View.setTextSize(stationTextSize);
+			p = new LayoutParams(source);
+			train2View.setLayoutParams(p);
+			ticketHolder.addView(train2View, p);
+			lastTrain2=train2View;
+			//HAS CONNECTION: PUT TRAINS ON BOTH SIDES 
+		}
+		else {
+			//DOES NOT HAVE CONNECTION: PUT TRAIN IN MIDDLE
+			source.setMargins(400- (int)(train1.length()*(fontSize*.7)), 20, 0, 0);
+			train1View.setTextColor(Color.BLACK);
+			train1View.setTextSize(stationTextSize);
+			p = new LayoutParams(source);
+			train1View.setLayoutParams(p);
+			ticketHolder.addView(train1View, p);
+			lastTrain1=train1View;
+			
 		}
 		
 		if (lastEnd !=null){
@@ -246,6 +293,8 @@ Ticket ticket;
 		}
 		TextView endStation = new TextView(this);
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+		Log.i("MyApplication", "abbrev in update is: " + task.getStationDest());
+		
 		String endText = stationNames.get(task.getStationDest());
 		endStation.setText(endText.toUpperCase());
 		source.setMargins( 650- endText.length()*(int)(fontSize*.7), topMargin, 0, 0);
@@ -546,7 +595,7 @@ Ticket ticket;
             		if (!stationForCoord(newX, newY).getName().equals("NULL")){
             		
             			lastPinALocation = stationForCoord(newX, newY);
-            			getTripInfo(lastPinALocation.getName(),"CAST");
+            			getTripInfo(lastPinALocation.getName(),"24TH");
             			Log.i("plazadrama", "setting text to: " + lastPinALocation.getFullName());
             			
             			

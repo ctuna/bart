@@ -130,12 +130,21 @@ public class Ticket extends View {
         widthOfLine = endCircleStart-startCircleStart;
         midCircleStart = widthOfLine/2 + startCircleStart + radius -20 ;
         Paint p = new Paint();
-        p.setStrokeWidth(30);
+        Paint arrowPaint = new Paint();
+        p.setStrokeWidth(15);
+        arrowPaint.setStrokeWidth(8);
         p.setColor(getResources().getColor(R.color.LineColor));
+        arrowPaint.setColor(getResources().getColor(R.color.LineColor));
         canvas.drawLine(startCircleStart+radius/2, topMargin, endCircleStart-radius/2, topMargin, p);
         canvas.drawCircle(startCircleStart, topMargin, 20, new Paint());
+
+        //draw arrows
+        canvas.drawLine(endCircleStart-radius, topMargin, endCircleStart-40, 40, arrowPaint);
+        canvas.drawLine(endCircleStart-radius, topMargin, endCircleStart-40, 72, arrowPaint);
         canvas.drawCircle(endCircleStart, topMargin, 20,  new Paint());
         if (hasTransfer) {
+            canvas.drawLine(midCircleStart-radius, topMargin, midCircleStart-40, 40, arrowPaint);
+            canvas.drawLine(midCircleStart-radius, topMargin, midCircleStart-40, 72, arrowPaint);
         	canvas.drawCircle(midCircleStart, topMargin, 20,  new Paint());
         }
     }
