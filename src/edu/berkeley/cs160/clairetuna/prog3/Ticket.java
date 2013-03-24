@@ -135,9 +135,12 @@ public class Ticket extends View {
         canvas.drawLine(startCircleStart+radius/2, topMargin, endCircleStart-radius/2, topMargin, p);
         canvas.drawCircle(startCircleStart, topMargin, 20, new Paint());
         canvas.drawCircle(endCircleStart, topMargin, 20,  new Paint());
-
+        if (hasTransfer) {
+        	canvas.drawCircle(midCircleStart, topMargin, 20,  new Paint());
+        }
     }
     
+    boolean hasTransfer= false;
     public int[] getStopCoords(String which){
     	if (which.equals("start")){
     		return new int[]{startCircleStart,topMargin};
@@ -152,7 +155,7 @@ public class Ticket extends View {
     
     public void drawTransfer(){
         vCanvas.drawCircle(midCircleStart, topMargin, 20,  new Paint());
-        invalidate();
+        //invalidate();
     }
     
     

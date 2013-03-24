@@ -223,6 +223,7 @@ Ticket ticket;
 		if (task.hasConnection()){
 			String train2 = task.getTrain2();
 			String middleText = stationNames.get(task.getTransferStation());
+			ticket.hasTransfer=true;
 			if (lastTransfer !=null){
 				ticketHolder.removeView(lastTransfer);
 			}
