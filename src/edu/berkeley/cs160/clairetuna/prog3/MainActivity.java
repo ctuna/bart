@@ -19,8 +19,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -29,27 +32,24 @@ public class MainActivity extends Activity {
 	public TripCostTask task;
 	public StationsTask stationsTask;
 	private HashMap<String, Double[]> stationCoordinates;
+	private HashMap<String, String> stationNames;
+	
 	LocationActivity locationActivity;
 	Location userLocation; 
 	MainView drawView;
 	ImageView pinA;
 	FrameLayout.LayoutParams pinParams;
 	FrameLayout fLayout;
-	TextView journeyFrom;
-	TextView journeyCost;
-	TextView journeyTimeUntil;
-	TextView journeyTrain;
-
+	LinearLayout ticketHolder;
 	int width = 200, height =100,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0;
 	
 	@Override
 	//Try BitmapFactory.decodeFile() and then setImageBitmap() on the ImageView.
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_main); 
-		journeyFrom = (TextView)findViewById(R.id.journey_name);
-		journeyCost = (TextView)findViewById(R.id.journey_cost);
-		journeyTimeUntil= (TextView)findViewById(R.id.journey_time_until);
-		journeyTrain= (TextView)findViewById(R.id.journey_train);
+		ticketHolder = (LinearLayout) findViewById(R.id.ticketholder);
+		
+		
 		instantiateLayout();
 		
 		
@@ -80,9 +80,29 @@ public void instantiateLayout(){
 	fLayout.addView(pinA, pinParams);
 	int pinAMarginTop = getRelativeTop(pinA);
 	int pinAMarginLeft = getRelativeLeft(pinA);
-	Log.i("MyApplication", "pin A margin top is: " + pinAMarginTop);
-	Log.i("MyApplication", "pin A margin left is: " + pinAMarginLeft);
+	
+	/**
+	TextView monkey = new TextView(this);
+	ViewGroup.MarginLayoutParams source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+	source.setMargins(0, 0, 0, 0);
+	monkey.setText("monkey");
+	monkey.setTextColor(Color.BLACK);
+	monkey.setTextSize(30);
+	LayoutParams p = new LayoutParams(source);
+	//monkey.setLayoutParams(params);
+	ticketHolder.addView(monkey, p);*/
+	
+	ticket = new Ticket(this);
+	ticketHolder.addView(ticket);
+	
+	
+	
 }
+Ticket ticket;
+
+	public void updateTicket(){
+		ticket.drawCircle(10,10, 10);
+	}
 	private int getRelativeLeft(View myView) {
 	        return myView.getLeft();
 	}
@@ -150,6 +170,9 @@ public void instantiateLayout(){
 		Log.i("MyApplication", "Hello Hello please don't crash");
 	}
 	
+	public void setStationNames(HashMap<String, String> names){
+		this.stationNames=names;
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -166,7 +189,6 @@ public void instantiateLayout(){
 	}
 	
 	public void getStationInfo(){
-		Log.i("MyApplication", "starting Get Station info");
 		stationsTask = new StationsTask();
 		stationsTask.setMaster(this);
 		stationsTask.execute();
@@ -180,11 +202,12 @@ public void instantiateLayout(){
 		String departureTime = task.getStartTime();
 		String fare = task.getFare();
 		String difference = TimeHelper.difference(timeNow, departureTime);
-		String train = task.getTrain();
-		journeyFrom.setText(drawView.getLastPinA().getFullName());
-		journeyCost.setText("$"+fare);
-		journeyTimeUntil.setText("departs at " + departureTime + "("+difference+")");
-		journeyTrain.setText(train);
+		String train1 = task.getTrain1();
+		
+		//journeyFrom.setText(drawView.getLastPinA().getFullName());
+		//journeyCost.setText("$"+fare);
+		//journeyTimeUntil.setText("departs at " + departureTime + "("+difference+")");
+		//journeyTrain.setText(stationNames.get(train1));
 		boolean isAfter = TimeHelper.isAfter(timeNow, departureTime);
 		Log.i("MyApplication", "TIME UNTIL IS: " + difference);
 		Log.i("MyApplication", "FARE IS: " + fare);
@@ -448,7 +471,7 @@ public void instantiateLayout(){
 
         			
             		if (lastPinALocation!=null){
-            		getTripInfo(lastPinALocation.getName(), "24th");
+            		
             		movePinATo(lastPinACoords[0], lastPinACoords[1]);
             		drawStation(lastPinALocation, true);
         			damaged.add(lastPinALocation);
@@ -468,9 +491,9 @@ public void instantiateLayout(){
             	//if (mapPath.contains((int)dX-dXGrab + (width/2), (int)dY-dYGrab + height)){           	
             		movePinA(dX-dXGrab, dY-dYGrab);
             		if (!stationForCoord(newX, newY).getName().equals("NULL")){
-            			
+            		
             			lastPinALocation = stationForCoord(newX, newY);
-            			
+            			getTripInfo(lastPinALocation.getName(), "cast");
             			Log.i("MyApplication", "setting text to: " + lastPinALocation.getFullName());
             			
             			

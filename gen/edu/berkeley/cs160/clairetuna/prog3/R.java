@@ -19,8 +19,9 @@ containing a value of this type.
         public static final int map=0x7f010000;
     }
     public static final class color {
+        public static final int LineColor=0x7f050001;
         public static final int StationColor=0x7f050000;
-        public static final int colors=0x7f050001;
+        public static final int colors=0x7f050002;
     }
     public static final class drawable {
         public static final int bart=0x7f020000;
@@ -31,13 +32,10 @@ containing a value of this type.
         public static final int usamap=0x7f020005;
     }
     public static final class id {
-        public static final int area20=0x7f090005;
-        public static final int journey_cost=0x7f090002;
-        public static final int journey_name=0x7f090001;
-        public static final int journey_time_until=0x7f090003;
-        public static final int journey_train=0x7f090004;
+        public static final int area20=0x7f090002;
         public static final int mapholder=0x7f090000;
-        public static final int menu_settings=0x7f090006;
+        public static final int menu_settings=0x7f090003;
+        public static final int ticketholder=0x7f090001;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <color name="StationColor">#abced1</color>
-
+<color name="LineColor">#6c6d6d</color>
  
 
 </resources>

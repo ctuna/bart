@@ -26,6 +26,7 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 	Context locationContext;
 	LocationManager manager;
 	HashMap<String, Double[]> stationCoordinates= new HashMap<String, Double[]>();
+	HashMap<String, String> stationNames = new HashMap<String, String>();
 	
 		private MainActivity master;
 		private final String API_KEY = "TJK4-R9EV-6R8E-UW7T";
@@ -85,18 +86,22 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		 	        boolean foundTrip = false;
 		 	        int i = 0;
 		 	        String stationAbbrev;
+		 	        String stationName;
 		 	        Double stationLatitude;
 		 	        Double stationLongitude;
 		 	        //there are 44 bart stations
 		 	        for (i=0; i<44;i++){
 		 	        	stationAbbrev = xmlDocument.getElementsByTagName("abbr").item(i).getTextContent();
+		 	        	stationName = xmlDocument.getElementsByTagName("name").item(i).getTextContent();
 		 	        	stationLatitude=Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_latitude").item(i).getTextContent());
 		 	        	stationLongitude = Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_longitude").item(i).getTextContent());
 		 	        	stationCoordinates.put(stationAbbrev, new Double [] {stationLatitude, stationLongitude});  
+		 	        	stationNames.put(stationAbbrev,  stationName);
 		 	        	 Log.i("MyApplication", stationAbbrev + ": (" + stationLatitude + ", " + stationLongitude + ")");
 		 	        	}
 		 	       Log.i("MyApplication", "before setCoordinates");
 		 	        master.setCoordinates(stationCoordinates);
+		 	        master.setStationNames(stationNames);
 		 	        
 		 	        
 	        	}

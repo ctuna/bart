@@ -15,6 +15,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 import android.os.AsyncTask;
@@ -31,14 +33,15 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	private MainActivity master;
 	private final String API_KEY = "TJK4-R9EV-6R8E-UW7T";
 	private  String url = "http://api.bart.gov/api/sched.aspx?key="+ API_KEY;
-	//private final String url = "http://api.bart.gov/api/bsa.aspx?cmd=count&key=" + API_KEY;
 	private Document xmlDocument;
-	
+    private boolean hasConnection=false;
+    private String transferStation;
+    private String train1;
+    private String train2;
     public String doInBackground(String...stations )
     {
     	String stationOrig = stations[0];
     	String stationDest = stations[1];
-    	//url+="&cmd=depart&orig="+ stationOrig + "&dest=" + stationDest;
     	url = "http://api.bart.gov/api/sched.aspx?key=MW9S-E7SL-26DU-VV8V&cmd=depart&orig="+stationOrig+"&dest="+stationDest;
     	Log.i("MyApplication", "Going to the url: "+ url);
     		   HttpClient httpclient = new DefaultHttpClient();
@@ -50,13 +53,10 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     	            response = httpclient.execute(new HttpGet(url));
     	            StatusLine statusLine = response.getStatusLine();
     	            if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-    	            	//Log.i("MyApplication", "In do in background: Status code OK");
     	                ByteArrayOutputStream out = new ByteArrayOutputStream();
     	                response.getEntity().writeTo(out);
-    	                //Log.i("MyApplication", "In do in background: checkpoint 2");
     	                out.close();
     	                responseString = out.toString();
-    	                //Log.i("MyApplication", "In do in background: checkpoint 3");
     	            } else{
     	            	Log.i("MyApplication", "In do in background: Status code not okay");
     	                //Closes the connection.
@@ -88,11 +88,27 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 	        boolean foundTrip = false;
 	 	        int i = 0;
 	 	        timeNow = xmlDocument.getElementsByTagName("time").item(0).getTextContent();
+	 	       NamedNodeMap currentTripAttributes;
+	 	       Node currentTrip;
+
 	 	        while (!foundTrip){
-	 	        fare = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("fare").getNodeValue();
-	 	        startTime = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("origTimeMin").getNodeValue();
-	 	        arrivalTime = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("destTimeMin").getNodeValue();
+	 	        	currentTrip =  xmlDocument.getElementsByTagName("trip").item(i);
+	 	        	currentTripAttributes = currentTrip.getAttributes();
+	 	        fare = currentTripAttributes.getNamedItem("fare").getNodeValue();
+	 	        startTime = currentTripAttributes.getNamedItem("origTimeMin").getNodeValue();
+	 	        arrivalTime = currentTripAttributes.getNamedItem("destTimeMin").getNodeValue();
+	 	        if (currentTrip.getChildNodes().getLength()==2){
+	 	        	hasConnection = true;
+	 	        	transferStation = currentTrip.getChildNodes().item(0).getAttributes().getNamedItem("destination").getNodeValue();
+	 	        	train1=currentTrip.getChildNodes().item(0).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
+	 	        	train2=currentTrip.getChildNodes().item(1).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
+	 	        	
+	 	        	Log.i("MyApplication", "Take " + train1 + " to " + transferStation + ", " + train2 + " to destination");
+	 	        	
+	 	        }
 	 	        trainName = xmlDocument.getElementsByTagName("leg").item(i).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
+	 	        
+	 	        
 	 	        if (TimeHelper.isAfter(timeNow, startTime)){
 	 	        	foundTrip=true;
 	 	        }
@@ -110,12 +126,6 @@ class TripCostTask extends AsyncTask<String, Void, String> {
         	Log.i("MyApplication", "results to XML query were null");
         }
        
-    	Log.i("MyApplication", "Task Done Executing");
-    	Log.i("MyApplication", "IN TRIPCOST FARE IS : " + fare);
-    	Log.i("MyApplication", "IN TRIPCOST TIME NOW IS : " + timeNow);
-    	Log.i("MyApplication", "IN TRIPCOST START TIME IS  : " + startTime);
-    	Log.i("MyApplication", "IN TRIPCOST ARRIVAL TIME IS  : " + arrivalTime);
-    	Log.i("MyApplication", "IN TRIPCOST ARRIVAL TRAIN NAME IS  : " + getTrain());
     }
 
 	public String getFare(){
@@ -163,6 +173,18 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	public void setMaster(MainActivity master){
 		Log.i("MyApplication", "Set master is called");
 		this.master=master;
+	}
+	
+	public boolean hasConnection(){
+		return hasConnection;
+	}
+	
+	public String getTrain1(){
+		return train1;
+	}
+	
+	public String getTrain2(){
+		return train2;
 	}
 
     }
