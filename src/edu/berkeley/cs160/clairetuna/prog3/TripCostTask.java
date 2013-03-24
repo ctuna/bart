@@ -27,12 +27,13 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	private String startTime;
 	private String arrivalTime;
 	private String timeNow;
+	private String trainName;
 	private MainActivity master;
 	private final String API_KEY = "TJK4-R9EV-6R8E-UW7T";
 	private  String url = "http://api.bart.gov/api/sched.aspx?key="+ API_KEY;
 	//private final String url = "http://api.bart.gov/api/bsa.aspx?cmd=count&key=" + API_KEY;
 	private Document xmlDocument;
-
+	
     public String doInBackground(String...stations )
     {
     	String stationOrig = stations[0];
@@ -67,6 +68,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     	            //TODO Handle problems..
     	        } catch (IOException e) {
     	        	Log.i("MyApplication", "Io");
+    	        	e.printStackTrace();
     	            //TODO Handle problems..
     	        }
     	       Log.i("MyApplication", "In do in background: done, return string is: "+ responseString);
@@ -90,6 +92,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 	        fare = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("fare").getNodeValue();
 	 	        startTime = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("origTimeMin").getNodeValue();
 	 	        arrivalTime = xmlDocument.getElementsByTagName("trip").item(i).getAttributes().getNamedItem("destTimeMin").getNodeValue();
+	 	        trainName = xmlDocument.getElementsByTagName("leg").item(i).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
 	 	        if (TimeHelper.isAfter(timeNow, startTime)){
 	 	        	foundTrip=true;
 	 	        }
@@ -99,6 +102,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
         	}
         	catch (Exception ex) {
         		Log.i("MyApplication", "Exception in on onPostExecute");
+        		ex.printStackTrace();
         		//do something
         	}
         }
@@ -111,6 +115,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
     	Log.i("MyApplication", "IN TRIPCOST TIME NOW IS : " + timeNow);
     	Log.i("MyApplication", "IN TRIPCOST START TIME IS  : " + startTime);
     	Log.i("MyApplication", "IN TRIPCOST ARRIVAL TIME IS  : " + arrivalTime);
+    	Log.i("MyApplication", "IN TRIPCOST ARRIVAL TRAIN NAME IS  : " + getTrain());
     }
 
 	public String getFare(){
@@ -127,6 +132,32 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	
 	public String getTimeNow(){
 		return timeNow;
+	}
+	
+	public String getTrain(){
+		if (trainName.equals("RICH")){
+			return "Richmond";
+		}
+		else if (trainName.equals("PITT")){
+			return "Pittsburg/Bay Point";
+		}
+		else if (trainName.equals("FRMT")){
+			return"Fremont";
+		}
+		else if (trainName.equals("MLBR")){
+			return "Millbrae";
+		}
+		else if (trainName.equals("DALY")){
+			return"Daly City";
+		}
+		else{
+			return"Dublin/Pleasanton";
+		}
+		
+		
+		
+		
+		
 	}
 	
 	public void setMaster(MainActivity master){

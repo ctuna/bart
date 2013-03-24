@@ -1,6 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:ctc="http://schemas.android.com/apk/res/edu.berkeley.cs160.clairetuna.prog3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
@@ -22,11 +21,46 @@
 
 
     </FrameLayout>
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    android:orientation="vertical"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginBottom="30dp"
+    
+     android:fontFamily = "Helvetica"
+    android:background="@color/StationColor"
+    tools:context=".MainActivity" >
+                        <TextView
+        android:padding="10dp"
+        android:id="@+id/journey_name"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight=".20"
-        android:layout_gravity="center"
-        android:text="@string/hello_world" />
+        android:layout_height="50dp"
+        android:textSize="30sp"
+       />
+        <TextView
+        android:id="@+id/journey_cost"
+       
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:textSize="10sp" />
+        <TextView
+        android:id="@+id/journey_time_until"
+   
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:textSize="10sp" />        
+        <TextView
+        android:id="@+id/journey_train"
+     
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:textSize="10sp" />
+
+        
+
+</LinearLayout>
 
 </LinearLayout>
