@@ -117,7 +117,7 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		 	       Log.i("MyApplication", "before setCoordinates");
 		 	        master.setCoordinates(stationCoordinates);
 		 	        master.setStationNames(stationNames);
-		 	        
+		 	        master.updateLocation();
 		 	        
 	        	}
 	        	catch (Exception ex) {

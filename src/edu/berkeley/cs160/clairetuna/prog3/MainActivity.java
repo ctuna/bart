@@ -67,6 +67,7 @@ public class MainActivity extends Activity {
 //	    
 	   // updateLocation();
 	   getStationInfo();
+	   
 	}
 
 	FrameLayout myLayout;
@@ -144,17 +145,25 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	public void updateLocation(){
 		Log.i("MyApplication", "Updated Location");
 		LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		locationActivity  = new LocationActivity(this);
 		Log.i("MyApplication", "GOT A LOCATION SERVICE");
 		userLocation = locationActivity.checkLocation(manager);
-		
+		closestStation();
     	//LocationHelper locationHelper = new LocationHelper(this);
 	}
-	
+	/*
+	public int[] coordsForStation(String abbrev){
+		int[] return = new int[2];
+		for (Polygon station: drawView.stations){
+			
+		}
+	}
+	*/
 	public String closestStation(){
 		Log.i("MyApplication", "In MainActivity/closestStation");
 		
 		String closestStation=null;
-		updateLocation();
+	
 		//Log.i("MyApplication", "User coords: " + userLocation.getLatitude()+ "," + userLocation.getLongitude());
 		Location locationB = new Location("point B");
 		float minDistance = Float.POSITIVE_INFINITY;
