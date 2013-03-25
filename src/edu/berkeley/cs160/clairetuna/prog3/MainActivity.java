@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 	FrameLayout.LayoutParams pinBParams;
 	FrameLayout fLayout;
 	FrameLayout ticketHolder;
-	int width = 300, height =200,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0, pinBMarginLeft=80, pinBMarginTop=80;
+	int width = 300, height =200,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0, pinBMarginLeft=20, pinBMarginTop=150;
 	
 	@Override
 	//Try BitmapFactory.decodeFile() and then setImageBitmap() on the ImageView.
@@ -101,8 +101,8 @@ public void instantiateLayout(){
 
 public void starTicket(){
 
-		ticket = new Ticket(this);
-		ticketHolder.addView(ticket);
+	ticket = new Ticket(this);
+	ticketHolder.addView(ticket);
 	helpButton = new Button(this);
 	helpButton.setText("step by step");
 	helpButton.setTextSize(15);
@@ -155,8 +155,6 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 		Log.i("MyApplication", "GOT A LOCATION SERVICE");
 		userLocation = locationActivity.checkLocation(manager);
 		closestStation = closestStation();
-		Log.i("MyApplication", "closest station is: " + closestStation);
-		Log.i("MyApplication", "coords for dBRK" + coordsForStation(closestStation)[0] +  "," + coordsForStation(closestStation)[1]);
 		float currentX=coordsForStation(closestStation)[0]- width/2+20;
 		float currentY=coordsForStation(closestStation)[1]-height+60;
 		movePinATo(currentX, currentY);
@@ -961,7 +959,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
         protected void onDraw(Canvas canvas) {
         	
             canvas.drawBitmap(bitmapBartMap, 0, 0, null);
-
+            Log.i("MyApplication", "ondraw called in view");
         }
         
         public void drawStation(Polygon poly, boolean drawing){
@@ -1105,7 +1103,6 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
         		float pinAYCoord;
         		float pinBXCoord;
         		float pinBYCoord;
-            	if (mapPath.contains((int)newX, (int)newY)){  
             	//if (mapPath.contains((int)newX-dXGrab + (width/2), (int)newY-dYGrab + height)){ 
             		
             		if (aSelected){
@@ -1152,7 +1149,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
             		}
             		
             	}
-            	}
+            	
             invalidate();
          return true;   
         }
