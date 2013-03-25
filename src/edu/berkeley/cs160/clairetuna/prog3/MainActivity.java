@@ -756,9 +756,9 @@ Ticket ticket;
             stations.add(poly26);
             
             //HAYWAYRD HAYW HAS 6B 
-            float[] xCoords27 = {484,555,567,566,571,496};
-            float[] yCoords27 = {681,609,608,612,622,696};
-            Polygon poly27 = new Polygon (xCoords27, yCoords27, 6, "HAYW");
+            float[] xCoords27 = {482,561,570,496};
+            float[] yCoords27 = {680,609,622,696};
+            Polygon poly27 = new Polygon (xCoords27, yCoords27, 4, "HAYW");
             stations.add(poly27);
             
             //SOUTH HAYWARD SHAY
@@ -869,9 +869,9 @@ Ticket ticket;
             Polygon poly44 = new Polygon (xCoords44, yCoords44, 4, "SFIA");
             stations.add(poly44);
             //MILLBRAE
-            float[] xCoords45 = {79,246,267, 127};
-            float[] yCoords45 = {862,729,750,867};
-            Polygon poly45 = new Polygon (xCoords45, yCoords44, 5, "MLBR");
+            float[] xCoords45 = {79,246,265,125};
+            float[] yCoords45 = {863,729,752,866};
+            Polygon poly45 = new Polygon (xCoords45, yCoords44, 4, "MLBR");
             stations.add(poly45);
             
      
@@ -879,7 +879,7 @@ Ticket ticket;
         }
         
         
-     
+
         
         public Polygon stationForCoord(float x, float y){
         	for (Polygon station : stations){
@@ -892,8 +892,7 @@ Ticket ticket;
         
         @Override
         protected void onDraw(Canvas canvas) {
-        	Log.i("MyApplication", "ONDRAW CALLED");
-        	Log.i("MyApplication", "BITMAP IS: " + bitmapBartMap);
+        	
             canvas.drawBitmap(bitmapBartMap, 0, 0, null);
 
         }
@@ -935,7 +934,7 @@ Ticket ticket;
             newX = event.getX();
             newY = event.getY();
             
-            Log.i("MyApplication", "LAST PIN A COORDS ARE: (" + lastPinACoords[0] + ", " + lastPinACoords[1]+")");
+           
             float pinAdX;
             float pinAdY;
             float pinBdX;
@@ -1011,7 +1010,7 @@ Ticket ticket;
                 }
            
             else if (event.getAction()== MotionEvent.ACTION_UP){
-            	Log.i("MyApplication", "Releasing with a selected: " + aSelected + "B selected: " + bSelected);
+            	//Log.i("MyApplication", "Releasing with a selected: " + aSelected + "B selected: " + bSelected);
         			
             		if (lastPinALocation!=null && aSelected){
             		
