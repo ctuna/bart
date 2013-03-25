@@ -113,6 +113,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	public void onClick(View v){
 		Intent intent = new Intent(MainActivity.this, DisplayGuidance.class);
 		String[] goodies = new String[8];
+		
 		goodies[0] = String.valueOf(task.hasConnection());
 		goodies[1] = stationNames.get(task.getStationOrig());
 		goodies[2] = stationNames.get(task.getStationDest());
@@ -122,6 +123,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 		goodies[6] = task.getTrain2();
 		goodies[7] = difference;
 		intent.putExtra("GOODIES", goodies);
+		startActivity(intent);
 	}
 };
 

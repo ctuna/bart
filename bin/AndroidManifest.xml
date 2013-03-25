@@ -32,6 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+                <activity
+            android:name="edu.berkeley.cs160.clairetuna.prog3.DisplayGuidance">
+       
+        </activity>
     </application>
 
 </manifest>
