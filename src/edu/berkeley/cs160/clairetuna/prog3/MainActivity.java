@@ -788,36 +788,98 @@ Ticket ticket;
             //EMBARCADERO
             
             float[] xCoords32 = {227,241,314,299};
-            float[] yCoords32 = {227,241,314,299};
+            float[] yCoords32 = {442,427,503,521};
             Polygon poly32 = new Polygon (xCoords32, yCoords32, 4, "EMBR");
             stations.add(poly32);
             
+            //MONTGOMERY
+            
+            float[] xCoords33 = {205,218,292,278};
+            float[] yCoords33 = {471,455,526,542};
+            Polygon poly33 = new Polygon (xCoords33, yCoords33, 4, "MONT");
+            stations.add(poly33);
+            
+            //POWELL
+            
+            float[] xCoords34 = {183,196,272,259};
+            float[] yCoords34 = {497,481,549,567};
+            Polygon poly34 = new Polygon (xCoords34, yCoords34, 4, "POWL");
+            stations.add(poly34);
+            
+            //CIVIC CENTER
+            
+            float[] xCoords35 = {161,175,250,237};
+            float[] yCoords35 = {522,506,575,590};
+            Polygon poly35 = new Polygon (xCoords35, yCoords35, 4, "CIVC");
+            stations.add(poly35);
+            
+            //16H ST MS
+            
+            float[] xCoords36 = {142,155,231,216};
+            float[] yCoords36 = {545,527,598,614};
+            Polygon poly36 = new Polygon (xCoords36, yCoords36, 4, "16TH");
+            stations.add(poly36);
+            
+            //24H ST MS
+            
+            float[] xCoords37 = {124,137,211,197};
+            float[] yCoords37 = {568,553,619,636};
+            Polygon poly37 = new Polygon (xCoords37, yCoords37, 4, "24TH");
+            stations.add(poly37);
+            //GLEN PARK
+            
+            float[] xCoords38 = {105,118,193,181};
+            float[] yCoords38 = {587,572,641,657};
+            Polygon poly38 = new Polygon (xCoords38, yCoords38, 4, "GLEN");
+            stations.add(poly38);
+            
+            //balboa PARK
+            
+            float[] xCoords39 = {84,97,174,161};
+            float[] yCoords39 = {614,599,661,675};
+            Polygon poly39 = new Polygon (xCoords39, yCoords39, 4, "BALB");
+            stations.add(poly39);
+            
+            //DALY CITY
+            
+            
+            float[] xCoords40 = {62,75,159,150};
+            float[] yCoords40 = {637,623,680,689};
+            Polygon poly40 = new Polygon (xCoords40, yCoords40, 4, "DALY");
+            stations.add(poly40);
+            //COLMA
+            
+            float[] xCoords41 = {19,34, 125,147};
+            float[] yCoords41 = {693,672,682,700};
+            Polygon poly41 = new Polygon (xCoords41, yCoords41, 4, "COLM");
+            stations.add(poly41);
+            //SOUTH SF
+            float[] xCoords42 = {56,150,163,69};
+            float[] yCoords42 = {741,702,714,756};
+            Polygon poly42 = new Polygon (xCoords42, yCoords42, 4, "SSAN");
+            stations.add(poly42);
+            //SAN BRUNO
+            float[] xCoords43 = {82,165,179,93};
+            float[] yCoords43 = {768,716,731,786};
+            Polygon poly43 = new Polygon (xCoords43, yCoords43, 4, "SBRN");
+            stations.add(poly43);
+            //SFO 
+            float[] xCoords44 = {103,186,200,115};
+            float[] yCoords44 = {794,736,752,811};
+            Polygon poly44 = new Polygon (xCoords44, yCoords44, 4, "SFIA");
+            stations.add(poly44);
+            //MILLBRAE
+            float[] xCoords45 = {79,246,267, 127};
+            float[] yCoords45 = {862,729,750,867};
+            Polygon poly45 = new Polygon (xCoords45, yCoords44, 5, "MLBR");
+            stations.add(poly45);
+            
+     
+        
         }
-        /**
-
-         * , ,
-         * ,   
-         * ,	442,427,503,521
-         * 205,218,292,278,	471,455,526,542
-         * 183,196,272,259,	497,481,549,567
-         * 161,175,250,237,	522,506,575,590
-         * 142,155,231,216,	545,527,598,614
-         * 124,137,211,197,	568,553,619,636
-         * 105,118,193,181,	587,572,641,657
-         * 84,97,174,161,	614,599,661,675
-         * 62,75,159,150,	637,623,680,689
-         * 19,34, 125,147,	693,672,682,700
-         * 56,150,163,69,	741,702,714,756
-         * 82,165,179,93,	768,716,731,786
-         * 103,186,200,115,	794,736,752,811
-         * 79,246,267, 127 	862,729,750,867
-         * 
-         * int[] ylala = {,,,,,,,,,,,,,,,,,,,
-
-         * @param x
-         * @param y
-         * @return
-         */
+        
+        
+     
         
         public Polygon stationForCoord(float x, float y){
         	for (Polygon station : stations){
