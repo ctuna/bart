@@ -158,21 +158,19 @@ Ticket ticket;
 	
 	
 	public boolean isOnPinA(float x, float y){
-		boolean xProper = (x>=pinAMarginLeft && x<=pinAMarginLeft + width);
-		boolean yProper = (y>=pinAMarginTop && y<= pinAMarginTop + height);
+		boolean xProper = (x>=pinAMarginLeft+(width/4) && x<=pinAMarginLeft + 3*width/4);
+		boolean yProper = (y>=pinAMarginTop && y<= pinAMarginTop + height*.75);
 		return xProper && yProper;
 	}
 	
 	public boolean isOnPinB(float x, float y){
-		boolean xProper = (x>=pinBMarginLeft && x<=pinBMarginLeft + width);
-		boolean yProper = (y>=pinBMarginTop && y<= pinBMarginTop + height);
+		boolean xProper = (x>=pinBMarginLeft+(width/4) && x<=pinBMarginLeft + 3*width/4);
+		boolean yProper = (y>=pinBMarginTop && y<= pinBMarginTop +  height*.75);
 		return xProper && yProper;
 	}
 	
 	public void setCoordinates(HashMap<String, Double[]> coords){
 		this.stationCoordinates=coords;
-		//String s = closestStation();
-		Log.i("MyApplication", "Hello Hello please don't crash");
 	}
 	
 	public void setStationNames(HashMap<String, String> names){
@@ -731,7 +729,20 @@ Ticket ticket;
     		}
     		
             if (event.getAction()== MotionEvent.ACTION_DOWN){
-            	if (isOnPinA(newX, newY) && !bSelected){
+            	if (isOnPinA(newX, newY) && isOnPinB(newX, newY)){
+            		//if overLapping, pick frontmost in z order 
+            		if (fLayout.indexOfChild(pinA)>fLayout.indexOfChild(pinB)){
+                    	aSelected=true;
+                		pinAdXGrab=newX-oldPinAMarginLeft;
+                		pinAdYGrab=newY-oldPinAMarginTop;
+            		}
+            		else {
+                    	bSelected=true;
+                		pinBdXGrab=newX-oldPinBMarginLeft;
+                		pinBdYGrab=newY-oldPinBMarginTop;
+            		}
+            	}
+            	else if (isOnPinA(newX, newY) && !bSelected){
             		//how far into the pin
             	aSelected=true;
         		pinAdXGrab=newX-oldPinAMarginLeft;
