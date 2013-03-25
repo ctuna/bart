@@ -4,22 +4,28 @@
     android:layout_height="match_parent"
     android:id="@+id/layout"
     android:orientation="vertical"
-    android:padding="20dp" >
+    android:fontFamily = "Helvetica"
+    android:background="@color/TicketBackground"
+    android:padding="50dp" >
     
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+       android:paddingRight="20dp" >
 
     <TextView
-                android:textSize = "30sp"
+        android:textColor = "@color/TitleText"
+                android:textSize = "70sp"
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1" />
     
     <TextView
+		android:textSize = "20sp"
         android:id="@+id/advice1"
+        android:textColor = "@color/ValueText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Find a BART ticket machine." />
@@ -27,17 +33,21 @@
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+       android:paddingRight="20dp" >
 
     <TextView
+        android:textColor = "@color/TitleText"
         android:id="@+id/TextView02"
-        android:textSize = "30sp"
+        android:textSize = "70sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2" />
     
     <TextView
+		android:textSize = "20sp"
+        android:textColor = "@color/ValueText"
         android:id="@+id/ticketAdvice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,17 +57,21 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="135dp"
-    android:orientation="horizontal" >
+    android:layout_height="175dp"
+    android:orientation="horizontal"
+       android:paddingRight="20dp" >
 
     <TextView
-        android:textSize = "30sp"
+        android:textColor = "@color/TitleText"
+        android:textSize = "70sp"
         android:id="@+id/TextView03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="3" />
     
     <TextView
+		android:textSize = "20sp"
+        android:textColor = "@color/ValueText"
         android:id="@+id/advice4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,16 +84,20 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+       android:paddingRight="20dp" >
 
     <TextView
-        android:textSize = "30sp"
+        android:textColor = "@color/TitleText"
+        android:textSize = "70sp"
         android:id="@+id/TextView04"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="4" />
     
     <TextView
+		android:textSize = "20sp"
+        android:textColor = "@color/ValueText"
         android:id="@+id/boardTrainAdvice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -89,16 +107,20 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+       android:paddingRight="20dp" >
 
     <TextView
-        android:textSize = "30sp"
+        android:textColor = "@color/TitleText"
+        android:textSize = "70sp"
         android:id="@+id/TextView05"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5" />
     
     <TextView
+		android:textSize = "20sp"
+        android:textColor = "@color/ValueText"
         android:id="@+id/exitTrainAdvice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -109,16 +131,20 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal" 
+       android:paddingRight="20dp">
 
     <TextView
-        android:textSize = "30sp"
+        android:textColor = "@color/TitleText"
+        android:textSize = "70sp"
         android:id="@+id/boardTrain2Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" />
     
     <TextView
+		android:textSize = "20sp"
+	    android:textColor = "@color/ValueText"
         android:id="@+id/boardTrain2Advice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -129,16 +155,21 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingRight="20dp" >
+
 
     <TextView
-        android:textSize = "30sp"
+        android:textColor = "@color/TitleText"
+        android:textSize = "70sp"
         android:id="@+id/exitTrain2Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" />
     
     <TextView
+		android:textColor = "@color/ValueText"
+		android:textSize = "20sp"
         android:id="@+id/exitTrain2Advice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -112,16 +112,17 @@ Ticket ticket;
 View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	public void onClick(View v){
 		Intent intent = new Intent(MainActivity.this, DisplayGuidance.class);
-		String[] goodies = new String[8];
+		String[] goodies = new String[9];
 		
 		goodies[0] = String.valueOf(task.hasConnection());
 		goodies[1] = stationNames.get(task.getStationOrig());
 		goodies[2] = stationNames.get(task.getStationDest());
 		goodies[3] = stationNames.get(task.getTransferStation());
 		goodies[4] = task.getFare();
-		goodies[5] = task.getTrain1();
-		goodies[6] = task.getTrain2();
-		goodies[7] = difference;
+		goodies[5] = stationNames.get(task.getTrain1());
+		goodies[6] = stationNames.get(task.getTrain2());
+		goodies[7] = task.getStartTime();
+		goodies[8] = roundTripCostString;
 		intent.putExtra("GOODIES", goodies);
 		startActivity(intent);
 	}
@@ -140,9 +141,6 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	}
 	
 	
-	public void drawSomething(){
-		
-	}
 	public void updateLocation(){
 		Log.i("MyApplication", "Updated Location");
 		LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -241,6 +239,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	TextView lastEndTimeDifference;
 	Button helpButton;
 	String difference;
+	String roundTripCostString;
 	public void updateTripInfo(){
 		String timeNow = task.getTimeNow();
 		String departureTime = task.getStartTime();
@@ -363,7 +362,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 		
 		
 		TextView roundTripValue = new TextView(this);
-		String roundTripCostString;
+	
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 		source.setMargins(270 + 130, topMargin+80, 0, 0);
 		float roundTripCost = Float.parseFloat(fare)*2;
