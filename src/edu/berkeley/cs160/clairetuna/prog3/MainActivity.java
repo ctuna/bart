@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 	FrameLayout.LayoutParams pinBParams;
 	FrameLayout fLayout;
 	FrameLayout ticketHolder;
-	int width = 200, height =100,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0, pinBMarginLeft=80, pinBMarginTop=80;
+	int width = 300, height =200,  pinAMarginLeft = 10, marginRight =0, pinAMarginTop = 10, marginBottom = 0, pinBMarginLeft=80, pinBMarginTop=80;
 	
 	@Override
 	//Try BitmapFactory.decodeFile() and then setImageBitmap() on the ImageView.
@@ -440,7 +440,7 @@ Ticket ticket;
 		
 		TextView endTime = new TextView(this);
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		source.setMargins(650- endTime.length()*(int)(fontSize*.7), topMargin+30, 0, 0);
+		source.setMargins(650- 65, topMargin+30, 0, 0);
 		endTime.setText(arrivalTime);
 		endTime.setTextColor(white);
 		endTime.setTextSize(timeTextSize);
@@ -448,15 +448,6 @@ Ticket ticket;
 		endTime.setLayoutParams(p);
 		ticketHolder.addView(endTime, p);
 		lastEndTime=endTime;
-		
-		//journeyFrom.setText(drawView.getLastPinA().getFullName());
-		//journeyCost.setText("$"+fare);
-		//journeyTimeUntil.setText("departs at " + departureTime + "("+difference+")");
-		//journeyTrain.setText(stationNames.get(train1));
-		boolean isAfter = TimeHelper.isAfter(timeNow, departureTime);
-		Log.i("MyApplication", "TIME UNTIL IS: " + difference);
-		Log.i("MyApplication", "FARE IS: " + fare);
-		Log.i("MyApplication", "Is leave in the future?: " + isAfter);
 	}
 	
 	
@@ -596,8 +587,9 @@ Ticket ticket;
            
           //  (Resources res, int id, BitmapFactory.Options opts) and specify inMutable
             BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.inMutable=true;
-            bitmapBartMap  = BitmapFactory.decodeResource(getResources(), mapId, opts);
+            //opts.inMutable=true;
+            //EMULATOR
+            bitmapBartMap  = BitmapFactory.decodeResource(getResources(), mapId).copy(Bitmap.Config.ARGB_8888, true);
             vCanvas = new Canvas(bitmapBartMap);
             instantiatePolygons();
             //23 total
@@ -871,7 +863,7 @@ Ticket ticket;
             //MILLBRAE
             float[] xCoords45 = {79,246,265,125};
             float[] yCoords45 = {863,729,752,866};
-            Polygon poly45 = new Polygon (xCoords45, yCoords44, 4, "MLBR");
+            Polygon poly45 = new Polygon (xCoords45, yCoords45, 4, "MLBR");
             stations.add(poly45);
             
      
@@ -1033,13 +1025,24 @@ Ticket ticket;
             	Log.i("MyApplication", "Coords with count "+ coordCount + Xprogram + " " + Yprogram);
             }
             else {
+            	float pinAXCoord;
+        		float pinAYCoord;
+        		float pinBXCoord;
+        		float pinBYCoord;
             	if (mapPath.contains((int)newX, (int)newY)){  
-            	//if (mapPath.contains((int)newX-dXGrab + (width/2), (int)newY-dYGrab + height)){           	
+            	//if (mapPath.contains((int)newX-dXGrab + (width/2), (int)newY-dYGrab + height)){ 
+            		
             		if (aSelected){
+            			pinAXCoord=newX-pinAdXGrab+(width/2);
+            			pinAYCoord=newY-pinAdYGrab+height- 50;
+            			
             			movePinA(pinAdX-pinAdXGrab, pinAdY-pinAdYGrab);
-                		if (!stationForCoord(newX, newY).getName().equals("NULL")){
+                		if (!stationForCoord(pinAXCoord, pinAYCoord).getName().equals("NULL")){
+
+                			lastPinALocation = stationForCoord(pinAXCoord, pinAYCoord);
+                    	//if (!stationForCoord(newX, newY).getName().equals("NULL")){
                 		
-                			lastPinALocation = stationForCoord(newX, newY);
+                			//lastPinALocation = stationForCoord(newX, newY);
                 			
                 			if (lastPinBLocation!=null){
                 			getTripInfo(lastPinALocation.getName(),lastPinBLocation.getName());
@@ -1053,10 +1056,12 @@ Ticket ticket;
                 		}
             		}
             		else if (bSelected){
+            			pinBXCoord=newX-pinBdXGrab+(width/2);
+            			pinBYCoord=newY-pinBdYGrab+height- 50;
             			movePinB(pinBdX-pinBdXGrab, pinBdY-pinBdYGrab);
-                		if (!stationForCoord(newX, newY).getName().equals("NULL")){
+                		if (!stationForCoord(pinBXCoord, pinBYCoord).getName().equals("NULL")){
                 		
-                			lastPinBLocation = stationForCoord(newX, newY);
+                			lastPinBLocation = stationForCoord(pinBXCoord, pinBYCoord);
                 			
                 			if (lastPinALocation !=null){
                 			getTripInfo(lastPinALocation.getName(),lastPinBLocation.getName());
