@@ -123,6 +123,8 @@ public class Ticket extends View {
     	vCanvas.drawColor(getResources().getColor(R.color.TicketBackground));
     	canvas.drawColor(getResources().getColor(R.color.TicketBackground));
         canvas.drawBitmap(vBitmap, 0, 0, null);
+        
+        
         startCircleStart = 60;
         radius = 20;
         endCircleStart = width - radius - startCircleStart;
@@ -144,6 +146,9 @@ public class Ticket extends View {
         canvas.drawLine(endCircleStart-radius, topMargin, endCircleStart-40, 40, arrowPaint);
         canvas.drawLine(endCircleStart-radius, topMargin, endCircleStart-40, 72, arrowPaint);
         canvas.drawCircle(endCircleStart, topMargin, 20,  circlePaint);
+        
+        Log.i("MyApplication", "HAS TRANSFER IS:" + hasTransfer);
+        
         if (hasTransfer) {
             canvas.drawLine(midCircleStart-radius, topMargin, midCircleStart-40, 40, arrowPaint);
             canvas.drawLine(midCircleStart-radius, topMargin, midCircleStart-40, 72, arrowPaint);

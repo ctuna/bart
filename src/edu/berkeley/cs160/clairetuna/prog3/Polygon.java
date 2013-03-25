@@ -39,6 +39,14 @@ public class Polygon
         polyY = py;
         polySides = ps;
     }
+    
+    public Polygon( float[] px, float[] py, int ps, String abbrev)
+    {
+        polyX = px;
+        polyY = py;
+        name=abbrev;
+        polySides = ps;
+    }
     public String getName(){
     	return this.name;
     }

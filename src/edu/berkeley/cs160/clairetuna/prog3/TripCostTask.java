@@ -109,8 +109,10 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 	        	
 	 	        	train2=currentTrip.getChildNodes().item(1).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
 	 	        	
-	 	        	Log.i("MyApplication", "Take " + train1 + " to " + transferStation + ", " + train2 + " to destination");
 	 	        	
+	 	        }
+	 	        else {
+	 	        	hasConnection=false;
 	 	        }
 	 	        trainName = xmlDocument.getElementsByTagName("leg").item(i).getAttributes().getNamedItem("trainHeadStation").getNodeValue();
 	 	        

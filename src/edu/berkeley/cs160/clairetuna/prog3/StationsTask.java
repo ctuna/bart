@@ -93,6 +93,21 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		 	        for (i=0; i<44;i++){
 		 	        	stationAbbrev = xmlDocument.getElementsByTagName("abbr").item(i).getTextContent();
 		 	        	stationName = xmlDocument.getElementsByTagName("name").item(i).getTextContent();
+		 	        	if (stationName.equals("West Dublin/Pleasanton")){
+		 	        		stationName = "West Dublin";
+		 	        	}
+		 	        	else if (stationName.equals("Pleasant Hill/Contra Costa Centre")){
+		 	        		stationName = "Pleasant Hill";
+		 	        	}
+		 	        	else if (stationName.equals("12th St. Oakland City Center")){
+		 	        		stationName = "12th St/ Oakland";
+		 	        	}
+		 	        	else if (stationName.equals("San Francisco Int'l Airport")){
+		 	        		stationName = "SFO";
+		 	        	}
+		 	        	else if (stationName.equals("North Concord/Martinez")){
+		 	        		stationName = "N Concord/Martinez";
+		 	        	}
 		 	        	stationLatitude=Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_latitude").item(i).getTextContent());
 		 	        	stationLongitude = Double.parseDouble(xmlDocument.getElementsByTagName("gtfs_longitude").item(i).getTextContent());
 		 	        	stationCoordinates.put(stationAbbrev, new Double [] {stationLatitude, stationLongitude});  

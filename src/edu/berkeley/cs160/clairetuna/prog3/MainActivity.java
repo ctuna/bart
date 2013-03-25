@@ -217,7 +217,10 @@ Ticket ticket;
 		String fare = task.getFare();
 		String difference = TimeHelper.difference(timeNow, departureTime);
 		String train1 = task.getTrain1();
-
+		
+		boolean hasConnection = task.hasConnection();
+		ticket.hasTransfer=hasConnection;
+		Log.i("MyApplication", "in the task, connection is: " + hasConnection);
 		int grey = getResources().getColor(R.color.TitleText);
 		int white = getResources().getColor(R.color.ValueText);
 		
@@ -261,8 +264,8 @@ Ticket ticket;
 		TextView startStation = new TextView(this);
 		ViewGroup.MarginLayoutParams source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 		source.setMargins(40, topMargin, 0, 0);
-		String startStationString= drawView.lastPinALocation.getFullName();
-		startStation.setText(startStationString);
+		String startStationString= stationNames.get(task.getStationOrig());
+		startStation.setText(startStationString.toUpperCase());
 		startStation.setTextColor(white);
 		startStation.setTextSize(stationTextSize);
 		LayoutParams p = new LayoutParams(source);
@@ -350,7 +353,9 @@ Ticket ticket;
 		roundTripValue.setLayoutParams(p);
 		ticketHolder.addView(roundTripValue, p);
 		lastRoundTrip=roundTripValue;
-		
+		if (lastTransfer !=null){
+			ticketHolder.removeView(lastTransfer);
+		}
 		
 		train1 = stationNames.get(task.getTrain1());
 		TextView train1View = new TextView(this);
@@ -365,10 +370,8 @@ Ticket ticket;
 			
 			
 			String middleText = stationNames.get(task.getTransferStation());
-			ticket.hasTransfer=true;
-			if (lastTransfer !=null){
-				ticketHolder.removeView(lastTransfer);
-			}
+	
+			
 			TextView transferStation = new TextView(this);
 			source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
 			transferStation.setText(middleText.toUpperCase());
@@ -437,7 +440,7 @@ Ticket ticket;
 		
 		TextView endTime = new TextView(this);
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		source.setMargins(650- arrivalTime.length()*(int)(fontSize*.7), topMargin+30, 0, 0);
+		source.setMargins(650- endTime.length()*(int)(fontSize*.7), topMargin+30, 0, 0);
 		endTime.setText(arrivalTime);
 		endTime.setTextColor(white);
 		endTime.setTextSize(timeTextSize);
@@ -628,7 +631,193 @@ Ticket ticket;
             stations.add(richmondPoly);
            //INSTANTIATE LAST PIN A LOCATION
             
+            float[] xCoords5 = {305,400,406,313};
+            float[] yCoords5 = {177,129,148,194};
+            Polygon nbrkPoly = new Polygon (xCoords5, yCoords5, 4, "NBRK");
+            stations.add(nbrkPoly);
+            
+            float[] xCoords6 = {318,413,419,326};
+            float[] yCoords6 = {206,159,175,225};
+            Polygon dbrkPoly = new Polygon (xCoords6, yCoords6, 4, "DBRK");
+            stations.add(dbrkPoly);
+
+            
+            float[] xCoords7 = {332,426,435,338};
+            float[] yCoords7 = {238,191,207,257};
+            Polygon ashPoly = new Polygon (xCoords7, yCoords7, 4, "ASHB");
+            stations.add(ashPoly);
+            
+
+
+            float[] xCoords8 = {435,453,466,445};
+            float[] yCoords8 = {211,210,305,309};
+            Polygon rockPoly = new Polygon (xCoords8, yCoords8, 4, "ROCK");
+            stations.add(rockPoly);
+            
+            float[] xCoords9 = {464,485,498,478};
+            float[] yCoords9 = {205,201,300,304};
+            Polygon orindPoly = new Polygon (xCoords9, yCoords9, 4, "ORIN");
+            stations.add(orindPoly);
+            
+            float[] xCoords10 = {491,507,541,521};
+            float[] yCoords10 = {201,188,291,293};
+            Polygon lafPoly = new Polygon (xCoords10, yCoords10, 4, "LAFY");
+            stations.add(lafPoly);
+            
+            float[] xCoords11 = {508,523,586,572};
+            float[] yCoords11 = {186,173,257,270};
+            Polygon walnPoly = new Polygon (xCoords11, yCoords11, 4, "WCRK");
+            stations.add(walnPoly);
+            
+            float[] xCoords12 = {530,545,608,594};
+            float[] yCoords12 = {168,153,234,250};
+            Polygon phillPoly = new Polygon (xCoords12, yCoords12, 4, "PHIL");
+            stations.add(phillPoly);
+
+            
+//CONCORD
+            float[] xCoords13 = {554,570,635,620};
+            float[] yCoords13 = {146,132,212,225};
+            Polygon conPoly = new Polygon (xCoords13, yCoords13, 4, "CONC");
+            stations.add(conPoly);
+//NCONCONRD            
+            float[] xCoords14 = {580,594,658,644};
+            float[] yCoords14 = {124,111,188,202};
+            Polygon nconPoly = new Polygon (xCoords14, yCoords14, 4, "NCON");
+            stations.add(nconPoly);
+  //PITTS          
+            float[] xCoords15 = {586,605,711,689};
+            float[] yCoords15 = {85,62,174,192,194};
+            Polygon pitPoly = new Polygon (xCoords15, yCoords15, 4, "PITT");
+            stations.add(pitPoly);
+            
+            
+            //*
+           
+
+            //macarthur+
+            float[] xCoords16 = {333,440,436,331};
+            float[] yCoords16 = {286,311,331,309};
+            Polygon poly16 = new Polygon (xCoords16, yCoords16, 4, "MCAR");
+            stations.add(poly16);
+            
+            //19th st oakland
+            float[] xCoords17 = {326,431,428,322};
+            float[] yCoords17 = {332,352,374,351};
+            Polygon poly17 = new Polygon (xCoords17, yCoords17, 4, "19TH");
+            stations.add(poly17);
+            //12 st oakland
+            float[] xCoords18 = {319,424,422,315};
+            float[] yCoords18 = {364,387,408,383};
+            Polygon poly18 = new Polygon (xCoords18, yCoords18, 4, "12TH");
+            stations.add(poly18);
+            //lake merritt
+            float[] xCoords19 = {337,421,428,350};
+            float[] yCoords19 = {499,419,440,513};
+            Polygon poly19 = new Polygon (xCoords19, yCoords19, 4, "LAKE");
+            stations.add(poly19);
+            //fruitvale
+            float[] xCoords20 = {363,442,454,376};
+            float[] yCoords20 = {530,458,474,548};
+            Polygon poly20 = new Polygon (xCoords20, yCoords20, 4, "FTVL");
+            stations.add(poly20);
+            //colliseum
+            float[] xCoords21 = {396,464,480,409};
+            float[] yCoords21 = {569,488,500,586};
+            Polygon poly21 = new Polygon (xCoords21, yCoords21, 4, "COLS");
+            stations.add(poly21);
+            //san leandro
+            float[] xCoords22 = {430,496,522,444};
+            float[] yCoords22 = {614,500,499,632};
+            Polygon poly22 = new Polygon (xCoords22, yCoords22, 4, "SANL");
+            stations.add(poly22);
+            //bay fair
+            float[] xCoords23 = {458,539,561,472};
+            float[] yCoords23 = {645,497,501,667};
+            Polygon poly23 = new Polygon (xCoords23, yCoords23, 4, "BAYF");
+            stations.add(poly23);
+            //castro valley
+            float[] xCoords24 = {590,589,611,613};
+            float[] yCoords24 = {607,499,499,605};
+            Polygon poly24 = new Polygon (xCoords24, yCoords24, 4, "CAST");
+            stations.add(poly24);
+            //w dublin pleasanton
+            
+            float[] xCoords25 = {647,648,670,668};
+            float[] yCoords25 = {604,499,497,605};
+            Polygon poly25 = new Polygon (xCoords25, yCoords25, 4, "WDUB");
+            stations.add(poly25);
+            
+
+            //dublin pleasanton
+            float[] xCoords26 = {698,730,732,698};
+            float[] yCoords26 = {478,480,621,622};
+            Polygon poly26 = new Polygon (xCoords26, yCoords26, 4, "DUBL");
+            stations.add(poly26);
+            
+            //HAYWAYRD HAYW HAS 6B 
+            float[] xCoords27 = {484,555,567,566,571,496};
+            float[] yCoords27 = {681,609,608,612,622,696};
+            Polygon poly27 = new Polygon (xCoords27, yCoords27, 6, "HAYW");
+            stations.add(poly27);
+            
+            //SOUTH HAYWARD SHAY
+            float[] xCoords28 = {501,577,590,516};
+            float[] yCoords28 = {704,630,645,720};
+            Polygon poly28 = new Polygon (xCoords28, yCoords28, 4, "SHAY");
+            stations.add(poly28);
+            
+            //UNION CITY UCTY
+            float[] xCoords29 = {519,595,607,532};
+            float[] yCoords29 = {723,652,668,739};
+            Polygon poly29 = new Polygon (xCoords29, yCoords29, 4, "UCTY");
+            stations.add(poly29);
+            //FREMONT FRMT
+            
+            float[] xCoords30 = {518,632,653,537};
+            float[] yCoords30 = {765,661,684,788};
+            Polygon poly30 = new Polygon (xCoords30, yCoords30, 4, "FRMT");
+            stations.add(poly30);
+            //WEST OAKLAND HAS 6
+            
+            float[] xCoords31 = {276,296,338,320,318,276};
+            float[] yCoords31 = {411,406, 496,495,497,411};
+            Polygon poly31 = new Polygon (xCoords31, yCoords31, 6, "WOAK");
+            stations.add(poly31);
+            
+            //EMBARCADERO
+            
+            float[] xCoords32 = {227,241,314,299};
+            float[] yCoords32 = {227,241,314,299};
+            Polygon poly32 = new Polygon (xCoords32, yCoords32, 4, "EMBR");
+            stations.add(poly32);
+            
         }
+        /**
+
+         * , ,
+         * ,   
+         * ,	442,427,503,521
+         * 205,218,292,278,	471,455,526,542
+         * 183,196,272,259,	497,481,549,567
+         * 161,175,250,237,	522,506,575,590
+         * 142,155,231,216,	545,527,598,614
+         * 124,137,211,197,	568,553,619,636
+         * 105,118,193,181,	587,572,641,657
+         * 84,97,174,161,	614,599,661,675
+         * 62,75,159,150,	637,623,680,689
+         * 19,34, 125,147,	693,672,682,700
+         * 56,150,163,69,	741,702,714,756
+         * 82,165,179,93,	768,716,731,786
+         * 103,186,200,115,	794,736,752,811
+         * 79,246,267, 127 	862,729,750,867
+         * 
+         * int[] ylala = {,,,,,,,,,,,,,,,,,,,
+
+         * @param x
+         * @param y
+         * @return
+         */
         
         public Polygon stationForCoord(float x, float y){
         	for (Polygon station : stations){
@@ -780,7 +969,7 @@ Ticket ticket;
 
             		aSelected=false;
             		bSelected=false;
-            	//Log.i("MyApplication", "Coords with count "+ coordCount + Xprogram + " " + Yprogram);
+            	Log.i("MyApplication", "Coords with count "+ coordCount + Xprogram + " " + Yprogram);
             }
             else {
             	if (mapPath.contains((int)newX, (int)newY)){  
