@@ -95,9 +95,14 @@ public void instantiateLayout(){
 	fLayout.addView(pinB, pinBParams);
 
 
-	ticket = new Ticket(this);
-	ticketHolder.addView(ticket);
+	
+	
+}
 
+public void starTicket(){
+
+		ticket = new Ticket(this);
+		ticketHolder.addView(ticket);
 	helpButton = new Button(this);
 	helpButton.setText("step by step");
 	helpButton.setTextSize(15);
@@ -108,7 +113,8 @@ public void instantiateLayout(){
 	helpButton.setOnClickListener(helpButtonListener);
 	ticketHolder.addView(helpButton, buttonParams);
 	
-}
+	}
+
 Ticket ticket;
 View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	public void onClick(View v){
@@ -141,24 +147,49 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	        return myView.getTop();
 	}
 	
-	
+	String closestStation;
 	public void updateLocation(){
 		Log.i("MyApplication", "Updated Location");
 		LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationActivity  = new LocationActivity(this);
 		Log.i("MyApplication", "GOT A LOCATION SERVICE");
 		userLocation = locationActivity.checkLocation(manager);
-		closestStation();
+		closestStation = closestStation();
+		Log.i("MyApplication", "closest station is: " + closestStation);
+		Log.i("MyApplication", "coords for dBRK" + coordsForStation(closestStation)[0] +  "," + coordsForStation(closestStation)[1]);
+		float currentX=coordsForStation(closestStation)[0]- width/2+20;
+		float currentY=coordsForStation(closestStation)[1]-height+60;
+		movePinATo(currentX, currentY);
+		
+		
+		drawView.lastPinALocation = drawView.stationForCoord(currentX, currentY);
+    	//if (!stationForCoord(newX, newY).getName().equals("NULL")){
+		
+			//lastPinALocation = stationForCoord(newX, newY);
+			
+
+			drawView.lastPinACoords[0]=currentX;
+			drawView.lastPinACoords[1]=currentY;
+			drawView.lastPinALocation = drawView.stationForCoord(currentX, currentY);
+			drawView.drawStation(drawView.lastPinALocation, true);
+			drawView.pinADamaged.add(drawView.lastPinALocation);
+			drawView.invalidate();
+		
+		
     	//LocationHelper locationHelper = new LocationHelper(this);
 	}
-	/*
-	public int[] coordsForStation(String abbrev){
-		int[] return = new int[2];
+	
+	public float[] coordsForStation(String abbrev){
+		float[] toReturn = new float[2];
 		for (Polygon station: drawView.stations){
-			
+			if (station.getName().equals(abbrev)){
+				Log.i("MyApplication", "closest stationin coords is: " + station.getName());
+				return station.getCenterCoords();
+			}
 		}
+		return toReturn;
 	}
-	*/
+	
 	public String closestStation(){
 		Log.i("MyApplication", "In MainActivity/closestStation");
 		
@@ -220,11 +251,16 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 		return true;
 	}
 	
-    
-	public void getTripInfo(String stationOrig, String stationDest){		
+    boolean hasATrip=false;
+	public void getTripInfo(String stationOrig, String stationDest){	
+		
 		task = new TripCostTask();
 		task.setMaster(this);
 		task.execute(stationOrig, stationDest);
+		if (!hasATrip){
+			hasATrip=true;
+		starTicket();
+		}
 	}
 	
 	public void getStationInfo(){
@@ -511,7 +547,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
 	
 	public void movePinATo(float dX, float dY){
 		
-		Log.i("MyApplication", "called move pin A ");
+		Log.i("MyApplication", "called move pin A to " + dX + "," + dY);
 		pinAMarginLeft = (int) dX;
 		pinAMarginTop =(int)dY;
 		fLayout.removeView(pinA);
@@ -929,6 +965,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
         }
         
         public void drawStation(Polygon poly, boolean drawing){
+        	Log.i("MyApplication", "draw station called");
         	int color;
         	if (drawing){
         		color = getResources().getColor(R.color.StationColor);
@@ -948,7 +985,7 @@ View.OnClickListener helpButtonListener = new View.OnClickListener(){
         		vPath.lineTo(xCoords2[i], yCoords2[i]);
         	}
         	vCanvas.drawPath(vPath, paint);
-            
+            invalidate();
             
         }
         

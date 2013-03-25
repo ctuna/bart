@@ -28,8 +28,8 @@ public class Polygon
         polySides = ps;
         this.name = name;
         this.fullName = fullName;
-        this.center[0] = (px[0] + px[1]+ px[2] + px[3])/4;
-        this.center[1] = (py[0] + py[1]+ py[2] + py[3])/4;
+        this.center[0] = px[0];
+        this.center[1] = py[0];
     }
     
     
@@ -46,6 +46,8 @@ public class Polygon
         polyY = py;
         name=abbrev;
         polySides = ps;
+        this.center[0] = px[0];
+        this.center[1] = py[0];
     }
     public String getName(){
     	return this.name;
