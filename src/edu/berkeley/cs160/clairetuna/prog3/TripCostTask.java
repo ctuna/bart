@@ -96,7 +96,7 @@ class TripCostTask extends AsyncTask<String, Void, String> {
 	 	       NamedNodeMap currentTripAttributes;
 	 	       Node currentTrip;
 
-	 	        while (!foundTrip){
+	 	        while (!foundTrip && i<=3){
 	 	        	currentTrip =  xmlDocument.getElementsByTagName("trip").item(i);
 	 	        	currentTripAttributes = currentTrip.getAttributes();
 	 	        fare = currentTripAttributes.getNamedItem("fare").getNodeValue();

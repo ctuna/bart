@@ -4,6 +4,7 @@ public abstract class TimeHelper {
 
 	public static String difference(String timeNow, String timeLeave){
 		//12:43 AM
+		timeNow = "12:01 AM";
 		System.out.println("TIMENOW IS: " + timeNow + "TIME OF DEPARTURE IS "+ timeLeave);
 		int hoursNow = Integer.parseInt(timeNow.split(":")[0]);
 		int hoursLeave = Integer.parseInt(timeLeave.split(":")[0]);
@@ -48,6 +49,8 @@ public abstract class TimeHelper {
 	
 	/** returns whether the train leaves after the current time*/
 	public static boolean isAfter (String timeNow, String timeLeave){
+		
+		timeNow = "12:01 AM";
 		int hoursNow = Integer.parseInt(timeNow.split(":")[0]);
 		int hoursLeave = Integer.parseInt(timeLeave.split(":")[0]);
 		boolean isAfter=false;

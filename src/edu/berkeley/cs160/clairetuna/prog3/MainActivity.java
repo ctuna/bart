@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -95,11 +97,36 @@ public void instantiateLayout(){
 	ticket = new Ticket(this);
 	ticketHolder.addView(ticket);
 
+	helpButton = new Button(this);
+	helpButton.setText("step by step");
+	helpButton.setTextSize(15);
+	helpButton.setTextColor(Color.WHITE);
+	
+	FrameLayout.LayoutParams buttonParams =  new FrameLayout.LayoutParams(150, 50);
+	buttonParams.setMargins(525, 150, 0, 0);
+	helpButton.setOnClickListener(helpButtonListener);
+	ticketHolder.addView(helpButton, buttonParams);
 	
 }
 Ticket ticket;
+View.OnClickListener helpButtonListener = new View.OnClickListener(){
+	public void onClick(View v){
+		Intent intent = new Intent(MainActivity.this, DisplayGuidance.class);
+		String[] goodies = new String[8];
+		goodies[0] = String.valueOf(task.hasConnection());
+		goodies[1] = stationNames.get(task.getStationOrig());
+		goodies[2] = stationNames.get(task.getStationDest());
+		goodies[3] = stationNames.get(task.getTransferStation());
+		goodies[4] = task.getFare();
+		goodies[5] = task.getTrain1();
+		goodies[6] = task.getTrain2();
+		goodies[7] = difference;
+		intent.putExtra("GOODIES", goodies);
+	}
+};
 
-	public void updateTicket(){
+	public 
+	void updateTicket(){
 		ticket.drawCircle(10,10, 10);
 	}
 	private int getRelativeLeft(View myView) {
@@ -210,12 +237,14 @@ Ticket ticket;
 	TextView lastRoundTrip;
 	TextView lastStartTimeDifference;
 	TextView lastEndTimeDifference;
+	Button helpButton;
+	String difference;
 	public void updateTripInfo(){
 		String timeNow = task.getTimeNow();
 		String departureTime = task.getStartTime();
 		String arrivalTime = task.getArrivalTime();
 		String fare = task.getFare();
-		String difference = TimeHelper.difference(timeNow, departureTime);
+		difference = TimeHelper.difference(timeNow, departureTime);
 		String train1 = task.getTrain1();
 		
 		boolean hasConnection = task.hasConnection();
@@ -228,7 +257,7 @@ Ticket ticket;
 
 		int stationTextSize= 15;
 		int timeTextSize = 15;
-		int fareTextSize=25;
+		int fareTextSize=20;
 		int fontSize = stationTextSize;
 		int topMargin = 80;
 		
@@ -287,7 +316,7 @@ Ticket ticket;
 
 		TextView startTimeDifference = new TextView(this);
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		source.setMargins(40+80, topMargin+30, 0, 0);
+		source.setMargins(40+85, topMargin+30, 0, 0);
 		startTimeDifference.setText("(" + difference+ ")");
 		startTimeDifference.setTextColor(grey);
 		startTimeDifference.setTextSize(timeTextSize);
@@ -310,7 +339,7 @@ Ticket ticket;
 		
 		TextView oneWayValue = new TextView(this);
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		source.setMargins(40 + 150, topMargin+80, 0, 0);
+		source.setMargins(40 + 110, topMargin+80, 0, 0);
 		oneWayValue.setText("$" +fare);
 		oneWayValue.setTextColor(white);
 		oneWayValue.setTextSize(fareTextSize);
@@ -322,7 +351,7 @@ Ticket ticket;
 		
 		TextView roundTripTitle = new TextView(this);
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		source.setMargins(300, topMargin+80, 0, 0);
+		source.setMargins(270, topMargin+80, 0, 0);
 		roundTripTitle.setText("round-trip:");
 		roundTripTitle.setTextColor(grey);
 		roundTripTitle.setTextSize(fareTextSize);
@@ -334,7 +363,7 @@ Ticket ticket;
 		TextView roundTripValue = new TextView(this);
 		String roundTripCostString;
 		source= new ViewGroup.MarginLayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
-		source.setMargins(300 + 170, topMargin+80, 0, 0);
+		source.setMargins(270 + 130, topMargin+80, 0, 0);
 		float roundTripCost = Float.parseFloat(fare)*2;
 		if (Float.toString(roundTripCost).split("\\.")[1].length()==1){
 			roundTripCostString= Float.toString(roundTripCost) + "0";

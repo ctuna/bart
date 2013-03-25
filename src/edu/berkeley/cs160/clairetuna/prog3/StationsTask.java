@@ -103,7 +103,7 @@ public class StationsTask extends AsyncTask<String, Void, String> {
 		 	        		stationName = "12th St/ Oakland";
 		 	        	}
 		 	        	else if (stationName.equals("San Francisco Int'l Airport")){
-		 	        		stationName = "SFO";
+		 	        		//stationName = "SFO";
 		 	        	}
 		 	        	else if (stationName.equals("North Concord/Martinez")){
 		 	        		stationName = "N Concord/Martinez";
